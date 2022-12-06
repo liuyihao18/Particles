@@ -27,6 +27,11 @@ QMatrix4x4 Camera::getViewMatrix() const
 	return matrix;
 }
 
+QVector3D Camera::getPosition() const
+{
+	return eye;
+}
+
 void Camera::translateLeft(float dis)
 {
 	QVector3D z = (eye - center).normalized();

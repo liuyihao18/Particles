@@ -30,8 +30,12 @@ protected slots:
 
 private:
 	void compileShaderProgram(QOpenGLShaderProgram&, const QString&, const QString&);
+	void loadSphere();
 	void loadCube();
+	void loadLight();
 	void drawCube();
+	void drawLight();
+	void drawSphere();
 	void zoomIn(int);
 
 private:
@@ -44,6 +48,7 @@ private:
 	QTimer* timer;
 
 private:
-	QOpenGLShaderProgram cubeShaderProgram;
-	GLuint cubeVAO{ 0 }, cubeVBO{ 0 }, cubeEBO{ 0 }, cubeTexture{ 0 };
+	QOpenGLShaderProgram sphereShaderProgram, cubeShaderProgram, lightShaderProgram;
+	GLuint sphereVAO{ 0 }, cubeVAO{ 0 }, lightVAO{ 0 };
+	QVector3D spherePos, cubePos, lightPos;
 };

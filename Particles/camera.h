@@ -20,6 +20,7 @@ private:
 
 public:
 	QMatrix4x4 getViewMatrix() const;
+	QVector3D getPosition() const;
 	void translateLeft(float dis);
 	void translateUp(float dis);
 	void translateForward(float dis);

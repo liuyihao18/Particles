@@ -61,6 +61,18 @@
     <None Include="cube.vert">
       <Filter>Shader Files</Filter>
     </None>
+    <None Include="light.vert">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="light.frag">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="sphere.frag">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="sphere.vert">
+      <Filter>Shader Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="opengl_widget.h">

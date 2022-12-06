@@ -6,5 +6,9 @@
     <qresource prefix="/shader">
         <file>cube.frag</file>
         <file>cube.vert</file>
+        <file>light.frag</file>
+        <file>light.vert</file>
+        <file>sphere.frag</file>
+        <file>sphere.vert</file>
     </qresource>
 </RCC>

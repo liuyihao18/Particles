@@ -109,6 +109,10 @@
     <None Include="cpp.hint" />
     <None Include="cube.frag" />
     <None Include="cube.vert" />
+    <None Include="light.frag" />
+    <None Include="light.vert" />
+    <None Include="sphere.frag" />
+    <None Include="sphere.vert" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="opengl_widget.h" />
