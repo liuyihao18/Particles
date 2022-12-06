@@ -99,8 +99,21 @@
     <QtRcc Include="widget.qrc" />
     <QtUic Include="widget.ui" />
     <QtMoc Include="widget.h" />
+    <ClCompile Include="camera.cpp" />
+    <ClCompile Include="gui_handler.cpp" />
+    <ClCompile Include="opengl_widget.cpp" />
     <ClCompile Include="widget.cpp" />
     <ClCompile Include="main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="opengl_widget.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="camera.h" />
+    <QtMoc Include="gui_handler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
