@@ -107,12 +107,15 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+    <None Include="cube.frag" />
+    <None Include="cube.vert" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="opengl_widget.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
+    <ClInclude Include="constant.h" />
     <QtMoc Include="gui_handler.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

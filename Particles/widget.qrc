@@ -3,4 +3,8 @@
     <qresource prefix="/textures">
         <file>container.jpg</file>
     </qresource>
+    <qresource prefix="/shader">
+        <file>cube.frag</file>
+        <file>cube.vert</file>
+    </qresource>
 </RCC>

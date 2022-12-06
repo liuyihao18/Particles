@@ -9,14 +9,14 @@ class Camera
 public:
 	Camera();
 	Camera(const QVector3D& eye, const QVector3D& up, const QVector3D& center);
-	Camera(const QVector3D& eye, const QVector3D& up, const QVector3D& center, float dis_r);
+	Camera(const QVector3D& eye, const QVector3D& up, const QVector3D& center, float disR);
 	~Camera();
 
 private:
 	QVector3D eye;
 	QVector3D up;
 	QVector3D center;
-	float dis_r;
+	float disR;
 
 public:
 	QMatrix4x4 getViewMatrix() const;

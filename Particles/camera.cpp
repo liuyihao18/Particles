@@ -1,7 +1,7 @@
 #include "camera.h"
 
 Camera::Camera()
-	: eye(0, 0, 1), up(0, 1, 0), center(0, 0, 0), dis_r(3.0)
+	: eye(0, 0, 1), up(0, 1, 0), center(0, 0, 0), disR(3.0)
 {
 }
 
@@ -10,8 +10,8 @@ Camera::Camera(const QVector3D& eye, const QVector3D& up, const QVector3D& looka
 {
 }
 
-Camera::Camera(const QVector3D& eye, const QVector3D& up, const QVector3D& lookat, float dis_r)
-	: eye(eye), up(up.normalized()), center(lookat), dis_r(dis_r)
+Camera::Camera(const QVector3D& eye, const QVector3D& up, const QVector3D& lookat, float disR)
+	: eye(eye), up(up.normalized()), center(lookat), disR(disR)
 {
 }
 
@@ -21,7 +21,7 @@ Camera::~Camera()
 
 QMatrix4x4 Camera::getViewMatrix() const
 {
-	QVector3D real_eye = (eye - center).normalized() * dis_r + center;
+	QVector3D real_eye = (eye - center).normalized() * disR + center;
 	QMatrix4x4 matrix;
 	matrix.lookAt(real_eye, center, up);
 	return matrix;

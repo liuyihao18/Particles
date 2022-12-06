@@ -21,6 +21,9 @@
       <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
       <Extensions>ts</Extensions>
     </Filter>
+    <Filter Include="Shader Files">
+      <UniqueIdentifier>{6dbc8e73-6be1-435a-a56c-ab70f7053c9c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="widget.qrc">
@@ -52,6 +55,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+    <None Include="cube.frag">
+      <Filter>Shader Files</Filter>
+    </None>
+    <None Include="cube.vert">
+      <Filter>Shader Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="opengl_widget.h">
@@ -63,6 +72,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="constant.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
