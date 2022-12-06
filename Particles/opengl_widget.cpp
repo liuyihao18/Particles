@@ -45,7 +45,9 @@ void OpenGLWidget::paintGL()
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     drawSphere();
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     drawCube();
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
     drawLight();
 }
 
@@ -160,9 +162,9 @@ void OpenGLWidget::loadSphere()
         {
             float xSegment = (float)x / (float)X_SEGMENTS;
             float ySegment = (float)y / (float)Y_SEGMENTS;
-            float xPos = std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
-            float yPos = std::cos(ySegment * PI);
-            float zPos = std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+            float xPos = 0.5 * std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+            float yPos = 0.5 * std::cos(ySegment * PI);
+            float zPos = 0.5 * std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
             sphereVertices.push_back(xPos);
             sphereVertices.push_back(yPos);
             sphereVertices.push_back(zPos);
@@ -199,7 +201,7 @@ void OpenGLWidget::loadSphere()
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    spherePos = { 1, 0, 0 };
+    spherePos = { 0, 0, 0 };
 }
 
 void OpenGLWidget::loadCube()
@@ -253,35 +255,19 @@ void OpenGLWidget::loadLight()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     /* Position */
-    lightPos = { 1.0f, 1.2f, 0.0f };
+    lightPos = { 0, 3, 0 };
 }
 
 void OpenGLWidget::drawCube()
 {
     cubeShaderProgram.bind();
     {
-        // light
-        cubeShaderProgram.setUniformValue("light.position", lightPos);
-        cubeShaderProgram.setUniformValue("viewPos", camera.getPosition());
-        QVector3D lightColor;
-        lightColor.setX(1.0f);
-        lightColor.setY(1.0f);
-        lightColor.setZ(1.0f);
-        float diffuseDecay = 0.5f;
-        float ambientDecay = 0.2f;
-        cubeShaderProgram.setUniformValue("light.ambient", lightColor * ambientDecay);
-        cubeShaderProgram.setUniformValue("light.diffuse", lightColor * diffuseDecay);
-        cubeShaderProgram.setUniformValue("light.specular", lightColor);
-        cubeShaderProgram.setUniformValue("material.ambient", 1.0f, 0.5f, 0.31f);
-        cubeShaderProgram.setUniformValue("material.diffuse", 1.0f, 0.5f, 0.31f);
-        cubeShaderProgram.setUniformValue("material.specular", 0.5f, 0.5f, 0.5f);
-        cubeShaderProgram.setUniformValue("material.shininess", 32.0f);
-
         QMatrix4x4 view = camera.getViewMatrix();
         cubeShaderProgram.setUniformValue("view", view);
         cubeShaderProgram.setUniformValue("projection", projection);
         QMatrix4x4 model;
         model.translate(cubePos);
+        model.scale(3);
         cubeShaderProgram.setUniformValue("model", model);
 
         glBindVertexArray(cubeVAO);

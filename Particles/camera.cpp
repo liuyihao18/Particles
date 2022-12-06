@@ -1,7 +1,7 @@
 #include "camera.h"
 
 Camera::Camera()
-	: eye(0, 0, 1), up(0, 1, 0), center(0, 0, 0), disR(3.0)
+	: eye(5, 5, 5), up(0, 1, 0), center(0, 0, 0), disR(6.0)
 {
 }
 
