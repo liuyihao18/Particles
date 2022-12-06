@@ -3,6 +3,7 @@
 #include "camera.h"
 #include "light.h"
 #include "sphere.h"
+#include "cube.h"
 
 #include <QtOpenGLWidgets/QOpenGLWidget>
 #include <QtOpenGL/QOpenGLFunctions_3_3_Core>
@@ -53,6 +54,6 @@ private:
 private:
 	QOpenGLShaderProgram sphereShaderProgram, cubeShaderProgram, lightShaderProgram;
 	GLuint sphereVAO{ 0 }, cubeVAO{ 0 }, lightVAO{ 0 };
-	QVector3D cubePos;
 	Sphere sphere;
+	Cube cube;
 };

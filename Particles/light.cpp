@@ -28,6 +28,7 @@ QVector3D Light::specular() const
 
 void Light::GetVertices(QVector<float>& lightVertices)
 {
+    // A cube indeed.
     QVector<float> vertices = {
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
          0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,

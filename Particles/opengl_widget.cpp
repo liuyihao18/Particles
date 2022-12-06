@@ -223,15 +223,22 @@ void OpenGLWidget::loadSphere()
 void OpenGLWidget::loadCube()
 {
     /* Shader */
-    compileShaderProgram(cubeShaderProgram, CUBE_VERT_PATH, CUBE_FRAG_PATH);
+    compileShaderProgram(cubeShaderProgram, Cube::VERT_PATH, Cube::FRAG_PATH);
 
     /* VAO, VBO and EBO */
+    QVector<float> cubeVertices;
+    QVector<unsigned int> cubeIndices;
+    Cube::GetVertices(cubeVertices);
+    Cube::GetIndices(cubeIndices);
     GLuint cubeVBO{ 0 }, cubeEBO{ 0 };
     glGenVertexArrays(1, &cubeVAO);
     glGenBuffers(1, &cubeVBO);
+    glGenBuffers(1, &cubeEBO);
     glBindVertexArray(cubeVAO);
     glBindBuffer(GL_ARRAY_BUFFER, cubeVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(CUBE_VERTICES), CUBE_VERTICES, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, cubeVertices.size() * sizeof(float), cubeVertices.data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, cubeEBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, cubeIndices.size() * sizeof(float), cubeIndices.data(), GL_STATIC_DRAW);
     // position
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
@@ -244,7 +251,10 @@ void OpenGLWidget::loadCube()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 
     /* Position */
-    cubePos = { 0, 0, 0 };
+    cube = Cube(
+        QVector3D(0, 0, 0),
+        3.0f
+    );
 }
 
 void OpenGLWidget::drawCube()
@@ -255,8 +265,8 @@ void OpenGLWidget::drawCube()
         cubeShaderProgram.setUniformValue("view", view);
         cubeShaderProgram.setUniformValue("projection", projection);
         QMatrix4x4 model;
-        model.translate(cubePos);
-        model.scale(3);
+        model.translate(cube.position);
+        model.scale(cube.size);
         cubeShaderProgram.setUniformValue("model", model);
 
         glBindVertexArray(cubeVAO);
