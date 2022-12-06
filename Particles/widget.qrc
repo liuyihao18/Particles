@@ -1,4 +1,6 @@
 <RCC>
-    <qresource prefix="Widget">
+    <qresource prefix="/Widget"/>
+    <qresource prefix="/textures">
+        <file>container.jpg</file>
     </qresource>
 </RCC>
