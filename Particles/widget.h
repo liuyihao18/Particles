@@ -15,6 +15,11 @@ public:
     Widget(QWidget *parent = nullptr);
     ~Widget();
 
+protected slots:
+    void onInfoMsgReceived(QString);
+    void onWarnMsgReceived(QString);
+    void onErrMsgReceived(QString);
+
 private:
     Ui::WidgetClass *ui;
 };
