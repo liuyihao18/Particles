@@ -150,41 +150,14 @@ void OpenGLWidget::compileShaderProgram(QOpenGLShaderProgram& shaderProgram, con
 void OpenGLWidget::loadSphere()
 {
     /* Shader */
-    compileShaderProgram(sphereShaderProgram, SPHERE_VERT_PATH, SPHERE_FRAG_PATH);
+    compileShaderProgram(sphereShaderProgram, Sphere::VERT_PATH, Sphere::FRAG_PATH);
 
     /* VAO, VBO and EBO */
     // Reference: https://blog.csdn.net/weixin_41234001/article/details/104701508
     QVector<float> sphereVertices;
     QVector<unsigned int> sphereIndices;
-    for (int y = 0; y <= Y_SEGMENTS; y++)
-    {
-        for (int x = 0; x <= X_SEGMENTS; x++)
-        {
-            float xSegment = (float)x / (float)X_SEGMENTS;
-            float ySegment = (float)y / (float)Y_SEGMENTS;
-            float xPos = 0.5 * std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
-            float yPos = 0.5 * std::cos(ySegment * PI);
-            float zPos = 0.5 * std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
-            sphereVertices.push_back(xPos);
-            sphereVertices.push_back(yPos);
-            sphereVertices.push_back(zPos);
-            sphereVertices.push_back(xPos);
-            sphereVertices.push_back(yPos);
-            sphereVertices.push_back(zPos);
-        }
-    }
-    for (int i = 0; i < Y_SEGMENTS; i++)
-    {
-        for (int j = 0; j < X_SEGMENTS; j++)
-        {
-            sphereIndices.push_back(i * (X_SEGMENTS + 1) + j);
-            sphereIndices.push_back((i + 1) * (X_SEGMENTS + 1) + j);
-            sphereIndices.push_back((i + 1) * (X_SEGMENTS + 1) + j + 1);
-            sphereIndices.push_back(i * (X_SEGMENTS + 1) + j);
-            sphereIndices.push_back((i + 1) * (X_SEGMENTS + 1) + j + 1);
-            sphereIndices.push_back(i * (X_SEGMENTS + 1) + j + 1);
-        }
-    }
+    Sphere::GetVertices(sphereVertices);
+    Sphere::GetIndices(sphereIndices);
     GLuint sphereVBO{ 0 }, sphereEBO{ 0 };
     glGenVertexArrays(1, &sphereVAO);
     glGenBuffers(1, &sphereVBO);
@@ -201,7 +174,15 @@ void OpenGLWidget::loadSphere()
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-    spherePos = { 0, 0, 0 };
+
+    /* Model */
+    Material material(
+        QVector3D(1.0f, 0.5f, 0.31f),
+        QVector3D(1.0f, 0.5f, 0.31f),
+        QVector3D(0.5f, 0.5f, 0.5f),
+        32.0f
+    );
+    sphere = Sphere({ 0, 0, 0 }, 0.2, material);
 }
 
 void OpenGLWidget::loadCube()
@@ -310,17 +291,17 @@ void OpenGLWidget::drawSphere()
         sphereShaderProgram.setUniformValue("light.ambient", lightColor * ambientDecay);
         sphereShaderProgram.setUniformValue("light.diffuse", lightColor * diffuseDecay);
         sphereShaderProgram.setUniformValue("light.specular", lightColor);
-        sphereShaderProgram.setUniformValue("material.ambient", 1.0f, 0.5f, 0.31f);
-        sphereShaderProgram.setUniformValue("material.diffuse", 1.0f, 0.5f, 0.31f);
-        sphereShaderProgram.setUniformValue("material.specular", 0.5f, 0.5f, 0.5f);
-        sphereShaderProgram.setUniformValue("material.shininess", 32.0f);
+        sphereShaderProgram.setUniformValue("material.ambient", sphere.material.ambient);
+        sphereShaderProgram.setUniformValue("material.diffuse", sphere.material.diffuse);
+        sphereShaderProgram.setUniformValue("material.specular", sphere.material.specular);
+        sphereShaderProgram.setUniformValue("material.shininess", sphere.material.shininess);
 
         QMatrix4x4 view = camera.getViewMatrix();
         sphereShaderProgram.setUniformValue("view", view);
         sphereShaderProgram.setUniformValue("projection", projection);
         QMatrix4x4 model;
-        model.translate(spherePos);
-        model.scale(0.5);
+        model.translate(sphere.position);
+        model.scale(sphere.radius);
         sphereShaderProgram.setUniformValue("model", model);
 
         glBindVertexArray(sphereVAO);

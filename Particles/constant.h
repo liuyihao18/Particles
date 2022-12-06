@@ -9,9 +9,6 @@ constexpr char CUBE_FRAG_PATH[] = ":/shader/cube.frag";
 constexpr char LIGHT_VERT_PATH[] = ":/shader/light.vert";
 constexpr char LIGHT_FRAG_PATH[] = ":/shader/light.frag";
 
-constexpr int Y_SEGMENTS = 50;
-constexpr int X_SEGMENTS = 50;
-
 constexpr float CUBE_VERTICES[] = {
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
          0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,

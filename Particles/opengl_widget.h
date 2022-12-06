@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "camera.h"
+#include "sphere.h"
 
 #include <QtOpenGLWidgets/QOpenGLWidget>
 #include <QtOpenGL/QOpenGLFunctions_3_3_Core>
@@ -50,5 +51,6 @@ private:
 private:
 	QOpenGLShaderProgram sphereShaderProgram, cubeShaderProgram, lightShaderProgram;
 	GLuint sphereVAO{ 0 }, cubeVAO{ 0 }, lightVAO{ 0 };
-	QVector3D spherePos, cubePos, lightPos;
+	QVector3D cubePos, lightPos;
+	Sphere sphere;
 };
