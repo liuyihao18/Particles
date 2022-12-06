@@ -1,11 +1,34 @@
-#pragma once
+#include "light.h"
 
-constexpr float PI = 3.14159265358979323846f;
+#include <QVector>
 
-constexpr char CUBE_VERT_PATH[] = ":/shader/cube.vert";
-constexpr char CUBE_FRAG_PATH[] = ":/shader/cube.frag";
+Light::Light(const QVector3D& position, const QVector3D& color, float ambientDecay, float diffuseDecay)
+	: position(position), color(color), ambientDecay(ambientDecay), diffuseDecay(diffuseDecay)
+{
+}
 
-constexpr float CUBE_VERTICES[] = {
+Light::~Light()
+{
+}
+
+QVector3D Light::ambient() const
+{
+	return color * ambientDecay;
+}
+
+QVector3D Light::diffuse() const
+{
+	return color * diffuseDecay;
+}
+
+QVector3D Light::specular() const
+{
+	return color;
+}
+
+void Light::GetVertices(QVector<float>& lightVertices)
+{
+    QVector<float> vertices = {
         -0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
          0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
          0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
@@ -47,4 +70,10 @@ constexpr float CUBE_VERTICES[] = {
          0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
         -0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
         -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
-};
+    };
+    lightVertices.clear();
+    lightVertices.append(vertices);
+}
+void Light::GetIndices(QVector<unsigned int>& lightIndices)
+{
+}

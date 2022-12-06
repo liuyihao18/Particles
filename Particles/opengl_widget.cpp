@@ -147,13 +147,48 @@ void OpenGLWidget::compileShaderProgram(QOpenGLShaderProgram& shaderProgram, con
     }
 }
 
+void OpenGLWidget::loadLight()
+{
+    /* Shader */
+    compileShaderProgram(lightShaderProgram, Light::VERT_PATH, Light::FRAG_PATH);
+
+    /* VAO, VBO and EBO */
+    QVector<float> lightVertices;
+    QVector<unsigned int> lightIndices;
+    Light::GetVertices(lightVertices);
+    Light::GetIndices(lightIndices);
+    GLuint lightVBO{ 0 }, lightEBO{ 0 };
+    glGenVertexArrays(1, &lightVAO);
+    glGenBuffers(1, &lightVBO);
+    glGenBuffers(1, &lightEBO);
+    glBindVertexArray(lightVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, lightVBO);
+    glBufferData(GL_ARRAY_BUFFER, lightVertices.size() * sizeof(float), lightVertices.data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, lightEBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, lightIndices.size() * sizeof(float), lightIndices.data(), GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+
+    /* Model */
+    light = Light(
+        QVector3D(0.0f, 2.0f, 0.0f),
+        QVector3D(1.0f, 0.9f, 1.0f),
+        0.2f,
+        0.5f
+    );
+}
+
 void OpenGLWidget::loadSphere()
 {
     /* Shader */
     compileShaderProgram(sphereShaderProgram, Sphere::VERT_PATH, Sphere::FRAG_PATH);
 
     /* VAO, VBO and EBO */
-    // Reference: https://blog.csdn.net/weixin_41234001/article/details/104701508
     QVector<float> sphereVertices;
     QVector<unsigned int> sphereIndices;
     Sphere::GetVertices(sphereVertices);
@@ -212,33 +247,6 @@ void OpenGLWidget::loadCube()
     cubePos = { 0, 0, 0 };
 }
 
-void OpenGLWidget::loadLight()
-{
-    /* Shader */
-    compileShaderProgram(lightShaderProgram, LIGHT_VERT_PATH, LIGHT_FRAG_PATH);
-
-    /* VAO, VBO and EBO */
-    GLuint lightVBO{ 0 }, lightEBO{ 0 };
-    glGenVertexArrays(1, &lightVAO);
-    glGenBuffers(1, &lightVBO);
-    glBindVertexArray(lightVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, lightVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(CUBE_VERTICES), CUBE_VERTICES, GL_STATIC_DRAW);
-    // position
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-    // normal
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-    // unbind
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    /* Position */
-    lightPos = { 0, 3, 0 };
-}
-
 void OpenGLWidget::drawCube()
 {
     cubeShaderProgram.bind();
@@ -265,8 +273,8 @@ void OpenGLWidget::drawLight()
         lightShaderProgram.setUniformValue("view", view);
         lightShaderProgram.setUniformValue("projection", projection);
         QMatrix4x4 model;
-        model.translate(lightPos);
-        model.scale(0.2f);
+        model.translate(light.position);
+        model.scale(light.size);
         lightShaderProgram.setUniformValue("model", model);
 
         glBindVertexArray(lightVAO);
@@ -280,22 +288,19 @@ void OpenGLWidget::drawSphere()
     sphereShaderProgram.bind();
     {
         // light
-        sphereShaderProgram.setUniformValue("light.position", lightPos);
+        sphereShaderProgram.setUniformValue("light.position", light.position);
         sphereShaderProgram.setUniformValue("viewPos", camera.getPosition());
-        QVector3D lightColor;
-        lightColor.setX(1.0f);
-        lightColor.setY(1.0f);
-        lightColor.setZ(1.0f);
-        float diffuseDecay = 0.5f;
-        float ambientDecay = 0.2f;
-        sphereShaderProgram.setUniformValue("light.ambient", lightColor * ambientDecay);
-        sphereShaderProgram.setUniformValue("light.diffuse", lightColor * diffuseDecay);
-        sphereShaderProgram.setUniformValue("light.specular", lightColor);
+        sphereShaderProgram.setUniformValue("light.ambient", light.ambient());
+        sphereShaderProgram.setUniformValue("light.diffuse", light.diffuse());
+        sphereShaderProgram.setUniformValue("light.specular", light.specular());
+
+        // Material
         sphereShaderProgram.setUniformValue("material.ambient", sphere.material.ambient);
         sphereShaderProgram.setUniformValue("material.diffuse", sphere.material.diffuse);
         sphereShaderProgram.setUniformValue("material.specular", sphere.material.specular);
         sphereShaderProgram.setUniformValue("material.shininess", sphere.material.shininess);
 
+        // Model
         QMatrix4x4 view = camera.getViewMatrix();
         sphereShaderProgram.setUniformValue("view", view);
         sphereShaderProgram.setUniformValue("projection", projection);

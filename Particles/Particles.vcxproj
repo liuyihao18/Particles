@@ -101,6 +101,7 @@
     <QtMoc Include="widget.h" />
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="gui_handler.cpp" />
+    <ClCompile Include="light.cpp" />
     <ClCompile Include="material.cpp" />
     <ClCompile Include="opengl_widget.cpp" />
     <ClCompile Include="sphere.cpp" />
@@ -122,6 +123,7 @@
   <ItemGroup>
     <ClInclude Include="camera.h" />
     <ClInclude Include="constant.h" />
+    <ClInclude Include="light.h" />
     <ClInclude Include="material.h" />
     <ClInclude Include="sphere.h" />
     <QtMoc Include="gui_handler.h" />

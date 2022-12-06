@@ -13,6 +13,6 @@ public:
 	QVector3D ambient;
 	QVector3D diffuse;
 	QVector3D specular;
-	float shininess;
+	float shininess{ 1.0f };
 };
 

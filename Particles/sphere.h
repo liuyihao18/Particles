@@ -16,7 +16,7 @@ public:
 
 public:
 	QVector3D position;
-	float radius;
+	float radius{ 1.0f };
 	Material material;
 
 public:

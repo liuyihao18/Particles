@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "camera.h"
+#include "light.h"
 #include "sphere.h"
 
 #include <QtOpenGLWidgets/QOpenGLWidget>
@@ -31,11 +32,11 @@ protected slots:
 
 private:
 	void compileShaderProgram(QOpenGLShaderProgram&, const QString&, const QString&);
-	void loadSphere();
-	void loadCube();
 	void loadLight();
-	void drawCube();
+	void loadCube();
+	void loadSphere();
 	void drawLight();
+	void drawCube();
 	void drawSphere();
 	void zoomIn(int);
 
@@ -45,12 +46,13 @@ private:
 	int mouse_x{ 0 }, mouse_y{ 0 };
 
 	Camera camera;
+	Light light;
 	QMatrix4x4 projection;
 	QTimer* timer;
 
 private:
 	QOpenGLShaderProgram sphereShaderProgram, cubeShaderProgram, lightShaderProgram;
 	GLuint sphereVAO{ 0 }, cubeVAO{ 0 }, lightVAO{ 0 };
-	QVector3D cubePos, lightPos;
+	QVector3D cubePos;
 	Sphere sphere;
 };
