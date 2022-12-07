@@ -11,3 +11,5 @@
 #define __forceinline__
 #define __global__ __location__(global)
 #define __global__
+#define __device__ __location__(device)
+#define __device__

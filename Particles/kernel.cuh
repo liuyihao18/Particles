@@ -115,7 +115,7 @@ __device__ float3 collideSpheres(
 	float dist = length(relPos);
 	float collidDist = radiusA + radiusB;
 
-	float3 force = { 0 };
+	float3 force = make_float3(0.0f);
 	
 	if (dist < collidDist) {
 		// vel decompose
@@ -138,3 +138,113 @@ __device__ float3 collideSpheres(
 	return force;
 }
 
+__global__ void collideD(
+	float3* accel,            // output
+	float3* pos,              // input
+	float3* vel,              // input
+	uint* types,              // input
+	uint* gridParticleIndex,  // input: sorted particle indices
+	uint* cellStart,          // input
+	uint* cellEnd             // input
+) {
+	uint index = GET_INDEX;
+
+	if (index >= params.numSpheres) return;
+
+	uint originalIndexA = gridParticleIndex[index];
+
+	float3 posA = pos[originalIndexA];
+	float3 velA = vel[originalIndexA];
+	uint typeA = types[originalIndexA];	
+
+	int3 gridPosA = calcGridPos(posA);
+	
+	float3 force = make_float3(0.0f);
+	
+	for (int z = -1; z <= 1; z++) {
+		for (int y = -1; y <= 1; y++) {
+			for (int x = -1; x <= 1; x++) {
+				int3 neighborPos = gridPosA + make_int3(x, y, z);
+				uint neighborHash = calcGridHash(neighborPos);
+				uint startIndex = cellStart[neighborHash];
+
+				if (startIndex != 0xffffffff) {
+					uint endIndex = cellEnd[neighborHash];
+					for (uint j = startIndex; j < endIndex; j++) {
+						if (j != index) {
+							uint originalIndexB = gridParticleIndex[j];
+							float3 posB = pos[originalIndexB];
+							float3 velB = vel[originalIndexB];
+							uint typeB = types[originalIndexB];
+							force += collideSpheres(posA, posB, velA, velB, typeA, typeB);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	accel[originalIndexA] = force / protos.mass[typeA];
+}
+
+__global__ void updateD(
+	float3 *pos,
+	float3 *vel,
+	float3 *accel,
+	uint* types,
+	float deltaT
+) {
+	uint index = GET_INDEX;
+
+	if (index >= params.numSpheres) return;
+
+	float3 posA = pos[index];
+	float3 velA = vel[index];
+	float3 accelA = accel[index];
+	uint typeA = types[index];
+
+	float radiusA = protos.radius[typeA];
+	float restitution = protos.restitution[typeA][typeA];
+
+	float3 minCorner = params.minCorner;
+	float3 maxCorner = params.maxCorner;
+
+	velA += accelA * deltaT;
+	velA += params.gravity * deltaT;
+	velA *= params.decay;
+
+	posA += velA * deltaT;
+
+	if (posA.x > maxCorner.x - radiusA) {
+		posA.x = maxCorner.x - radiusA;
+		velA.x *= restitution;
+	}
+
+	if (posA.x < minCorner.x + radiusA) {
+		posA.x = minCorner.x + radiusA;
+		velA.x *= restitution;
+	}
+
+	if (posA.y > maxCorner.y - radiusA) {
+		posA.y = maxCorner.y - radiusA;
+		velA.y *= restitution;
+	}
+
+	if (posA.y < minCorner.y + radiusA) {
+		posA.y = minCorner.y + radiusA;
+		velA.y *= restitution;
+	}
+
+	if (posA.z > maxCorner.z - radiusA) {
+		posA.z = maxCorner.z - radiusA;
+		velA.z *= restitution;
+	}
+
+	if (posA.z < minCorner.z + radiusA) {
+		posA.z = minCorner.z + radiusA;
+		velA.z *= restitution;
+	}
+	
+	pos[index] = posA;
+	vel[index] = velA;
+}
