@@ -24,6 +24,9 @@
     <Filter Include="Shader Files">
       <UniqueIdentifier>{6dbc8e73-6be1-435a-a56c-ab70f7053c9c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Cuda Files">
+      <UniqueIdentifier>{a8196331-5cba-4a5d-b21b-139de1df7ce6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="widget.qrc">
@@ -113,5 +116,17 @@
     <ClInclude Include="cube.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="morton.cuh">
+      <Filter>Cuda Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kernel.cuh" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="simulation.cuh">
+      <Filter>Cuda Files</Filter>
+    </CudaCompile>
+    <CudaCompile Include="simulation.cu">
+      <Filter>Cuda Files</Filter>
+    </CudaCompile>
   </ItemGroup>
 </Project>
