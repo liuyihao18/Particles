@@ -23,6 +23,14 @@ void OpenGLWidget::initializeGL()
     initializeOpenGLFunctions();
     glEnable(GL_DEPTH_TEST);
 
+    /* Camera */
+    camera = Camera(
+        QVector3D(0.0f, 0.15f, -1.5f),
+        QVector3D(0, 0, 1),
+        QVector3D(0, 0, 0),
+        5.0f
+    );
+
     /* Perspective */
     projection.perspective(zoom, 1.0, 0.01, 100.0);
 
@@ -124,6 +132,7 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent* e)
 void OpenGLWidget::wheelEvent(QWheelEvent* e)
 {
     zoomIn(2 * (e->angleDelta().y() / 120));
+    qDebug() << camera.getPosition();
 }
 
 void OpenGLWidget::onTimeout()
