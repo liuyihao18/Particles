@@ -119,7 +119,12 @@
     <ClInclude Include="morton.cuh">
       <Filter>Cuda Files</Filter>
     </ClInclude>
-    <ClInclude Include="kernel.cuh" />
+    <ClInclude Include="param.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kernel.cuh">
+      <Filter>Cuda Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="simulation.cuh">

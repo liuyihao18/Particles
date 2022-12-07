@@ -38,3 +38,8 @@ __forceinline__ __device__ uint EncodeMorton3(uint x, uint y, uint z)
 {
 	return (Part1By2(z) << 2) + (Part1By2(y) << 1) + Part1By2(x);
 }
+
+__forceinline__ __device__ uint EncodeMorton3(int3 p)
+{
+	return EncodeMorton3(p.x, p.y, p.z);
+}
