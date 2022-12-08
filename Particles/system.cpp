@@ -18,6 +18,25 @@ System::~System()
     finalize();
 }
 
+float* System::getPos()
+{
+    copyArrayFromDevice(hPos, dPos, numParticles * sizeof(float) * 3);
+    return hPos;
+}
+
+void System::update(float deltaT)
+{
+    calcHash(dGridParticleHash, dGridParticleIndex, dPos, numParticles);
+    sortParticles(dGridParticleHash, dGridParticleIndex, numParticles);
+    findCellStart(dCellStart, dCellEnd, dGridParticleHash, numParticles, numCells);
+    collide(dPos, dVel, dAccel, dType, dGridParticleIndex, dCellStart, dCellEnd, numParticles, deltaT);
+}
+
+uint* System::getSphereType()
+{
+    return hType;
+}
+
 void System::initParams()
 {
     // compute protos
@@ -97,7 +116,7 @@ void System::initialize()
     // CPU Data
     hPos = new float[numParticles * 3]();
     hVel = new float[numParticles * 3]();
-    hAccel = new float[numParticles * 3]();
+    hType = new uint[numParticles]();
 
     initParams();
     initParticles();
@@ -108,8 +127,8 @@ void System::initialize()
     allocateArray((void**)&dAccel, numParticles * sizeof(float) * 3);
     initializeArray((void**)&dAccel, numParticles * sizeof(float) * 3);
     allocateArray((void**)&dType, numParticles * sizeof(uint));
-    allocateArray((void**)&dParticleHash, numParticles * sizeof(uint));
-    allocateArray((void**)&dParticleIndex, numParticles * sizeof(uint));
+    allocateArray((void**)&dGridParticleHash, numParticles * sizeof(uint));
+    allocateArray((void**)&dGridParticleIndex, numParticles * sizeof(uint));
     allocateArray((void**)&dCellStart, numCells * sizeof(uint));
     allocateArray((void**)&dCellEnd, numCells * sizeof(uint));
 
@@ -123,4 +142,16 @@ void System::initialize()
 
 void System::finalize()
 {
+    freeArray(dPos);
+    freeArray(dVel);
+    freeArray(dAccel);
+    freeArray(dType);
+    freeArray(dGridParticleHash);
+    freeArray(dGridParticleIndex);
+    freeArray(dCellStart);
+    freeArray(dCellEnd);
+
+    delete[] hPos;
+    delete[] hVel;
+    delete[] hType;
 }

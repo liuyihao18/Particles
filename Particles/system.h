@@ -15,7 +15,7 @@ public:
     ~System();
 
     float* getPos();
-    void update();
+    void update(float deltaT);
     uint* getSphereType();
 
 protected:
@@ -30,19 +30,15 @@ private:
     // CPU data
     float* hPos;
     float* hVel;
-    float* hAccel;
     uint* hType;
-    uint* hParticleHash;
-    uint* hCellStart;
-    uint* hCelllEnd;
 
     // GPU data
     float* dPos;
     float* dVel;
     float* dAccel;
     uint* dType;
-    uint* dParticleHash;
-    uint* dParticleIndex;
+    uint* dGridParticleHash;
+    uint* dGridParticleIndex;
     uint* dCellStart;
     uint* dCellEnd;
 

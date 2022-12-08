@@ -14,7 +14,6 @@ constexpr float GRAVITY = 0.2f;
 constexpr float SPRING = 1000.0f;
 constexpr float DAMPING = 8.0f;
 constexpr float FRICTION = 0.05f;
-constexpr float DELTA_T = 0.02f;
 
 constexpr float RESTITUION[4][4] = {
 	0.9f, 0.9f, 0.7f, 0.8f,
