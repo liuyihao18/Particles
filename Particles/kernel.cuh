@@ -13,36 +13,7 @@
 #define GET_INDEX __umul24(blockIdx.x, blockDim.x) + threadIdx.x
 
 __constant__ SimParams params;
-__constant__ SimProto protos;
-__constant__ int3 neighborhood[27] = {
-	-1, -1, -1,
-	 0, -1, -1,
-	 1, -1, -1,
-	-1,  0, -1,
-	 0,  0, -1,
-	 1,  0, -1,
-	-1,  1, -1,
-	 0,  1, -1,
-	 1,  1, -1,
-	-1, -1,  0,
-	 0, -1,  0,
-	 1, -1,  0,
-	-1,  0,  0,
-	 0,  0,  0,
-	 1,  0,  0,
-	-1,  1,  0,
-	 0,  1,  0,
-	 1,  1,  0,
-	-1, -1,  1,
-	 0, -1,  1,
-	 1, -1,  1,
-	-1,  0,  1,
-	 0,  0,  1,
-	 1,  0,  1,
-	-1,  1,  1,
-	 0,  1,  1,
-	 1,  1,  1,
-};
+__constant__ SimProtos protos;
 
 __device__ int3 calcGridPos(float3 p) {
 	int3 gridPos = {
@@ -60,11 +31,12 @@ __device__ uint calcGridHash(int3 gridPos) {
 __global__ void calcHashD(
 	uint* gridParticleHash,   // output
 	uint* gridParticleIndex,  // output
-	float3* pos               // input: positions
+	float3* pos,              // input: positions
+	uint numParticles
 ) {
 	uint index = GET_INDEX;
 
-	if (index >= params.numSpheres) return;
+	if (index >= numParticles) return;
 
 	// get address in grid
 	int3 gridPos = calcGridPos(pos[index]);
@@ -78,11 +50,12 @@ __global__ void calcHashD(
 __global__ void findCellStartD(
 	uint* cellStart,          // output: cell start index
 	uint* cellEnd,            // output: cell end index
-	uint* gridParticleHash    // input: sorted grid hashes
+	uint* gridParticleHash,   // input: sorted grid hashes
+	uint numParticles
 ) {
 	uint index = GET_INDEX;
 	
-	if (index >= params.numSpheres) return;
+	if (index >= numParticles) return;
 	
 	uint hash = gridParticleHash[index];
 
@@ -93,7 +66,7 @@ __global__ void findCellStartD(
 		cellStart[hash] = index;
 		cellEnd[gridParticleHash[index - 1]] = index;
 	}
-	if (index == params.numSpheres - 1) {
+	if (index == numParticles - 1) {
 		cellEnd[hash] = index + 1;
 	}
 }
@@ -145,11 +118,12 @@ __global__ void collideD(
 	uint* types,              // input
 	uint* gridParticleIndex,  // input: sorted particle indices
 	uint* cellStart,          // input
-	uint* cellEnd             // input
+	uint* cellEnd,            // input
+	uint numParticles
 ) {
 	uint index = GET_INDEX;
 
-	if (index >= params.numSpheres) return;
+	if (index >= numParticles) return;
 
 	uint originalIndexA = gridParticleIndex[index];
 
@@ -192,11 +166,12 @@ __global__ void updateD(
 	float3 *vel,
 	float3 *accel,
 	uint* types,
+	uint numParticles,
 	float deltaT
 ) {
 	uint index = GET_INDEX;
 
-	if (index >= params.numSpheres) return;
+	if (index >= numParticles) return;
 
 	float3 posA = pos[index];
 	float3 velA = vel[index];

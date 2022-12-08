@@ -10,8 +10,6 @@ using uint = unsigned int;
 
 // simulation parameters
 struct SimParams {
-    int numSpheres;
-
     // Grid
     float3 cellSize;
 
@@ -27,7 +25,7 @@ struct SimParams {
     float friction;
 };
 
-struct SimProto {
+struct SimProtos {
     float radius[4];
     float mass[4];
     float damping[4][4];

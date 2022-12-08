@@ -127,10 +127,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="simulation.cuh">
+    <CudaCompile Include="system.cuh">
       <Filter>Cuda Files</Filter>
     </CudaCompile>
-    <CudaCompile Include="simulation.cu">
+    <CudaCompile Include="system.cu">
       <Filter>Cuda Files</Filter>
     </CudaCompile>
   </ItemGroup>
