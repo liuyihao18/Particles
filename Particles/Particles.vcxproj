@@ -132,7 +132,6 @@
     <ClInclude Include="kernel.cuh" />
     <ClInclude Include="light.h" />
     <ClInclude Include="material.h" />
-    <ClInclude Include="morton.cuh" />
     <ClInclude Include="param.h" />
     <ClInclude Include="sphere.h" />
     <ClInclude Include="system.h" />

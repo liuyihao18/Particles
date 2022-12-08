@@ -4,11 +4,11 @@
 
 #pragma once
 
-#include "morton.cuh"
 #include "param.h"
 
 #include <cuda_runtime.h>
 #include <helper_math.h>
+#include <cstdio>
 
 #define GET_INDEX __umul24(blockIdx.x, blockDim.x) + threadIdx.x
 
@@ -25,7 +25,12 @@ __device__ int3 calcGridPos(float3 p) {
 }
 
 __device__ uint calcGridHash(int3 gridPos) {
-	return EncodeMorton3(gridPos);
+	// wrap grid, assumes size is power of 2
+	gridPos.x = gridPos.x & (params.gridSize - 1);  
+	gridPos.y = gridPos.y & (params.gridSize - 1);
+	gridPos.z = gridPos.z & (params.gridSize - 1);
+	return __umul24(__umul24(gridPos.z, params.gridSize), params.gridSize) +
+		__umul24(gridPos.y, params.gridSize) + gridPos.x;
 }
 
 __global__ void calcHashD(
@@ -41,6 +46,8 @@ __global__ void calcHashD(
 	// get address in grid
 	int3 gridPos = calcGridPos(pos[index]);
 	uint hash = calcGridHash(gridPos);
+
+	// printf("calcHashD: %d (%d, %d, %d) - %d\n", index, gridPos.x, gridPos.y, gridPos.z, hash);
 
 	// store grid hash and particle index
 	gridParticleHash[index] = hash;
@@ -58,6 +65,8 @@ __global__ void findCellStartD(
 	if (index >= numParticles) return;
 	
 	uint hash = gridParticleHash[index];
+
+	// printf("findCellStartD: %d - %d\n", index, hash);
 
 	if (index == 0) {
 		cellStart[hash] = index;
@@ -134,14 +143,13 @@ __global__ void collideD(
 	int3 gridPosA = calcGridPos(posA);
 	
 	float3 force = make_float3(0.0f);
-	
+
 	for (int z = -1; z <= 1; z++) {
 		for (int y = -1; y <= 1; y++) {
 			for (int x = -1; x <= 1; x++) {
 				int3 neighborPos = gridPosA + make_int3(x, y, z);
 				uint neighborHash = calcGridHash(neighborPos);
-				uint startIndex = cellStart[neighborHash];
-
+				uint startIndex = cellStart[neighborHash]; // BUG
 				if (startIndex != 0xffffffff) {
 					uint endIndex = cellEnd[neighborHash];
 					for (uint j = startIndex; j < endIndex; j++) {
@@ -157,7 +165,7 @@ __global__ void collideD(
 			}
 		}
 	}
-
+	
 	accel[originalIndexA] = force / protos.mass[typeA];
 }
 

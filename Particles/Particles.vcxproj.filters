@@ -119,9 +119,6 @@
     <ClInclude Include="cube.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="morton.cuh">
-      <Filter>Cuda Files</Filter>
-    </ClInclude>
     <ClInclude Include="param.h">
       <Filter>Header Files</Filter>
     </ClInclude>

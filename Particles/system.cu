@@ -72,7 +72,7 @@ extern "C" {
     void sortParticles(uint* gridParticleHash, uint* gridParticleIndex, uint numParticles) {
         thrust::sort_by_key(
             thrust::device_ptr<uint>(gridParticleHash),
-            thrust::device_ptr<uint>(gridParticleIndex + numParticles),
+            thrust::device_ptr<uint>(gridParticleHash + numParticles),
             thrust::device_ptr<uint>(gridParticleIndex)
         );
     }
@@ -101,7 +101,7 @@ extern "C" {
         getLastCudaError("collideD execution failed.");
 
         // update
-        // updateD <<< numBlocks, numThreads >>> ((float3*)pos, (float3*)vel, (float3*)accel, type, gridParticleIndex, numParticles, deltaT);
+        updateD <<< numBlocks, numThreads >>> ((float3*)pos, (float3*)vel, (float3*)accel, type, gridParticleIndex, numParticles, deltaT);
         getLastCudaError("updateD execution failed.");
     }
 

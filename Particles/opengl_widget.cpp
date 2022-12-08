@@ -88,9 +88,6 @@ void OpenGLWidget::keyPressEvent(QKeyEvent* e)
     case Qt::Key_X:
         zoomIn(-2);
         break;
-    case Qt::Key_U:
-        system.update(1 / fps);
-        break;
     }
 }
 
@@ -141,7 +138,7 @@ void OpenGLWidget::wheelEvent(QWheelEvent* e)
 
 void OpenGLWidget::onTimeout()
 {
-    // system.update(1 / fps);
+    system.update(1 / fps);
     update();
 }
 

@@ -54,6 +54,7 @@ void System::initParams()
     }
     
     // compute params
+    params.gridSize = GRID_SIZE;
     params.cellSize = cellSize = maxRadius * 2;
     params.minCorner = make_float3(
         origin.x() - 0.5 * size,

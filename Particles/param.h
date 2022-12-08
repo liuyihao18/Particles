@@ -13,6 +13,7 @@ using uint = unsigned int;
 // simulation parameters
 struct SimParams {
     // Grid
+    uint gridSize;
     float cellSize;
 
     // Container
