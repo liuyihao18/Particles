@@ -16,7 +16,7 @@ public:
 
     float* getPos();
     void update(float deltaT);
-    uint* getSphereType();
+    uint* getType();
 
 protected:
     void initParams();

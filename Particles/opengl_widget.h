@@ -4,6 +4,7 @@
 #include "light.h"
 #include "sphere.h"
 #include "cube.h"
+#include "system.h"
 
 #include <QtOpenGLWidgets/QOpenGLWidget>
 #include <QtOpenGL/QOpenGLFunctions_3_3_Core>
@@ -49,10 +50,10 @@ private:
 	Camera camera;
 	Light light;
 	QMatrix4x4 projection;
+	System system;
 	QTimer* timer;
 
 private:
 	QOpenGLShaderProgram sphereShaderProgram, cubeShaderProgram, lightShaderProgram;
 	GLuint sphereVAO{ 0 }, cubeVAO{ 0 }, lightVAO{ 0 };
-	Cube cube;
 };

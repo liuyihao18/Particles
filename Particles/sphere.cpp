@@ -22,9 +22,9 @@ void Sphere::GetVertices(QVector<float>& sphereVertices)
         {
             float xSegment = (float)x / (float)X_SEGMENTS;
             float ySegment = (float)y / (float)Y_SEGMENTS;
-            float xPos = 0.5 * std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
-            float yPos = 0.5 * std::cos(ySegment * PI);
-            float zPos = 0.5 * std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+            float xPos = std::cos(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
+            float yPos = std::cos(ySegment * PI);
+            float zPos = std::sin(xSegment * 2.0f * PI) * std::sin(ySegment * PI);
             sphereVertices.push_back(xPos);
             sphereVertices.push_back(yPos);
             sphereVertices.push_back(zPos);

@@ -145,8 +145,8 @@ __global__ void collideD(
 				if (startIndex != 0xffffffff) {
 					uint endIndex = cellEnd[neighborHash];
 					for (uint j = startIndex; j < endIndex; j++) {
-						if (j != index) {
-							uint originalIndexB = gridParticleIndex[j];
+						uint originalIndexB = gridParticleIndex[j];
+						if (originalIndexA != originalIndexB) {
 							float3 posB = pos[originalIndexB];
 							float3 velB = vel[originalIndexB];
 							uint typeB = type[originalIndexB];

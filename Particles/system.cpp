@@ -32,7 +32,7 @@ void System::update(float deltaT)
     collide(dPos, dVel, dAccel, dType, dGridParticleIndex, dCellStart, dCellEnd, numParticles, deltaT);
 }
 
-uint* System::getSphereType()
+uint* System::getType()
 {
     return hType;
 }
@@ -96,7 +96,7 @@ void System::initParticles()
     for (int x = 0; x < cubeSize; x++) {
         for (int y = 0; y < cubeSize; y++) {
             for (int z = 0; z < cubeSize; z++) {
-                int index = (x * 2 * cubeSize + y) * cubeSize + z;
+                int index = (x * cubeSize + y) * cubeSize + z;
                 if (index < numParticles) {
                     hPos[index * 3] = origin.x() + (x - cubeSize / 2.0) * cellSize + cellCenter + random(0, posRandomMax);
                     hPos[index * 3 + 1] = origin.y() + (y - cubeSize / 2.0) * cellSize + cellCenter + random(0, posRandomMax);
@@ -125,7 +125,7 @@ void System::initialize()
     allocateArray((void**)&dPos, numParticles * sizeof(float) * 3);
     allocateArray((void**)&dVel, numParticles * sizeof(float) * 3);
     allocateArray((void**)&dAccel, numParticles * sizeof(float) * 3);
-    initializeArray((void**)&dAccel, numParticles * sizeof(float) * 3);
+    initializeArray(dAccel, numParticles * sizeof(float) * 3);
     allocateArray((void**)&dType, numParticles * sizeof(uint));
     allocateArray((void**)&dGridParticleHash, numParticles * sizeof(uint));
     allocateArray((void**)&dGridParticleIndex, numParticles * sizeof(uint));

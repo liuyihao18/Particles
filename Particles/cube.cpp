@@ -63,3 +63,8 @@ void Cube::GetVertices(QVector<float>& cubeVertices)
 void Cube::GetIndices(QVector<unsigned int>& cubeIndices)
 {
 }
+
+Cube Cube::GetContainer()
+{
+    return Cube(QVector3D(0, 0, 0), 1.0f);
+}

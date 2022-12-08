@@ -5,9 +5,10 @@
 // This cube is just used to hold the sphere.
 class Cube
 {
-public:
+private:
 	Cube() = default;
 	Cube(const QVector3D& position, float size);
+public:
 	~Cube();
 
 public:
@@ -19,5 +20,6 @@ public:
 	static constexpr char FRAG_PATH[] = ":/shader/cube.frag";
 	static void GetVertices(QVector<float>& cubeVertices);
 	static void GetIndices(QVector<unsigned int>& cubeIndices);
+	static Cube GetContainer();
 };
 

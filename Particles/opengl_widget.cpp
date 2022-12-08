@@ -7,7 +7,8 @@
 #include <QTime>
 
 OpenGLWidget::OpenGLWidget(QWidget* parent)
-    : QOpenGLWidget(parent), timer(new QTimer(this))
+    : QOpenGLWidget(parent), timer(new QTimer(this)),
+    system(PARTICLE_NUM, Cube::GetContainer().position, Cube::GetContainer().size)
 {
     grabKeyboard();
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
@@ -87,6 +88,9 @@ void OpenGLWidget::keyPressEvent(QKeyEvent* e)
     case Qt::Key_X:
         zoomIn(-2);
         break;
+    case Qt::Key_U:
+        system.update(1 / fps);
+        break;
     }
 }
 
@@ -137,6 +141,7 @@ void OpenGLWidget::wheelEvent(QWheelEvent* e)
 
 void OpenGLWidget::onTimeout()
 {
+    // system.update(1 / fps);
     update();
 }
 
@@ -249,12 +254,6 @@ void OpenGLWidget::loadCube()
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    /* Position */
-    cube = Cube(
-        QVector3D(0, 0, 0),
-        1.0f
-    );
 }
 
 void OpenGLWidget::drawCube()
@@ -265,8 +264,8 @@ void OpenGLWidget::drawCube()
         cubeShaderProgram.setUniformValue("view", view);
         cubeShaderProgram.setUniformValue("projection", projection);
         QMatrix4x4 model;
-        model.translate(cube.position);
-        model.scale(cube.size);
+        model.translate(Cube::GetContainer().position);
+        model.scale(Cube::GetContainer().size);
         cubeShaderProgram.setUniformValue("model", model);
 
         glBindVertexArray(cubeVAO);
@@ -304,24 +303,30 @@ void OpenGLWidget::drawSphere()
         sphereShaderProgram.setUniformValue("light.diffuse", light.diffuse());
         sphereShaderProgram.setUniformValue("light.specular", light.specular());
 
-        // Material
-        Sphere sphere = Sphere::GetProto(0);
-        sphereShaderProgram.setUniformValue("material.ambient", sphere.material.ambient);
-        sphereShaderProgram.setUniformValue("material.diffuse", sphere.material.diffuse);
-        sphereShaderProgram.setUniformValue("material.specular", sphere.material.specular);
-        sphereShaderProgram.setUniformValue("material.shininess", sphere.material.shininess);
-
-        // Model
         QMatrix4x4 view = camera.getViewMatrix();
         sphereShaderProgram.setUniformValue("view", view);
         sphereShaderProgram.setUniformValue("projection", projection);
-        QMatrix4x4 model;
-        model.translate(QVector3D(0, 0, 0));
-        model.scale(sphere.radius);
-        sphereShaderProgram.setUniformValue("model", model);
 
-        glBindVertexArray(sphereVAO);
-        glDrawElements(GL_TRIANGLES, X_SEGMENTS * Y_SEGMENTS * 6, GL_UNSIGNED_INT, 0);
+        float* pos = system.getPos();
+        uint* type = system.getType();
+        for (int i = 0; i < PARTICLE_NUM; i++) {
+            QVector3D position(pos[3 * i], pos[3 * i + 1], pos[3 * i + 2]);
+            // Material
+            Sphere sphere = Sphere::GetProto(type[i]);
+            sphereShaderProgram.setUniformValue("material.ambient", sphere.material.ambient);
+            sphereShaderProgram.setUniformValue("material.diffuse", sphere.material.diffuse);
+            sphereShaderProgram.setUniformValue("material.specular", sphere.material.specular);
+            sphereShaderProgram.setUniformValue("material.shininess", sphere.material.shininess);
+
+            // Model
+            QMatrix4x4 model;
+            model.translate(position);
+            model.scale(sphere.radius);
+            sphereShaderProgram.setUniformValue("model", model);
+
+            glBindVertexArray(sphereVAO);
+            glDrawElements(GL_TRIANGLES, X_SEGMENTS * Y_SEGMENTS * 6, GL_UNSIGNED_INT, 0);
+        }
     }
     sphereShaderProgram.release();
 }
