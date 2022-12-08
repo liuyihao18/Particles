@@ -87,7 +87,7 @@ extern "C" {
         getLastCudaError("findCellStartD execution failed.");
     }
 
-    void collide(float* pos, float* vel, float* accel, uint* types,
+    void collide(float* pos, float* vel, float* accel, uint* type,
         uint* gridParticleIndex,
         uint* cellStart, uint* cellEnd,
         uint numParticles,
@@ -97,11 +97,11 @@ extern "C" {
         computeGridSize(numParticles, 256, numBlocks, numThreads);
 
         // compute collision
-        collideD <<< numBlocks, numThreads >>> ((float3*)accel, (float3*)pos, (float3*)vel, types, gridParticleIndex, cellStart, cellEnd, numParticles);
+        collideD <<< numBlocks, numThreads >>> ((float3*)accel, (float3*)pos, (float3*)vel, type, gridParticleIndex, cellStart, cellEnd, numParticles);
         getLastCudaError("collideD execution failed.");
 
         // update
-        updateD <<< numBlocks, numThreads >>> ((float3*)pos, (float3*)vel, (float3*)accel, types, gridParticleIndex, numParticles, deltaT);
+        updateD <<< numBlocks, numThreads >>> ((float3*)pos, (float3*)vel, (float3*)accel, type, gridParticleIndex, numParticles, deltaT);
         getLastCudaError("updateD execution failed.");
     }
 

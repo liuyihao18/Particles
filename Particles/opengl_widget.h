@@ -54,6 +54,5 @@ private:
 private:
 	QOpenGLShaderProgram sphereShaderProgram, cubeShaderProgram, lightShaderProgram;
 	GLuint sphereVAO{ 0 }, cubeVAO{ 0 }, lightVAO{ 0 };
-	Sphere sphere;
 	Cube cube;
 };

@@ -9,13 +9,14 @@ constexpr int X_SEGMENTS = 50;
 
 class Sphere
 {
-public:
+private:
 	Sphere() = default;
-	Sphere(const QVector3D& position, float radius, const Material& material);
+	Sphere(float mass, float radius, const Material& material);
+public:
 	~Sphere();
 
 public:
-	QVector3D position;
+	float mass{ 1.0f };
 	float radius{ 1.0f };
 	Material material;
 
@@ -24,5 +25,5 @@ public:
 	static constexpr char FRAG_PATH[] = ":/shader/sphere.frag";
 	static void GetVertices(QVector<float>& sphereVertices);
 	static void GetIndices(QVector<unsigned int>& sphereIndices);
+	static Sphere GetProto(unsigned int type);
 };
-

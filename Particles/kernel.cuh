@@ -115,7 +115,7 @@ __global__ void collideD(
 	float3* accel,            // output
 	float3* pos,              // input
 	float3* vel,              // input
-	uint* types,              // input
+	uint* type,               // input
 	uint* gridParticleIndex,  // input: sorted particle indices
 	uint* cellStart,          // input
 	uint* cellEnd,            // input
@@ -129,7 +129,7 @@ __global__ void collideD(
 
 	float3 posA = pos[originalIndexA];
 	float3 velA = vel[originalIndexA];
-	uint typeA = types[originalIndexA];	
+	uint typeA = type[originalIndexA];	
 
 	int3 gridPosA = calcGridPos(posA);
 	
@@ -149,7 +149,7 @@ __global__ void collideD(
 							uint originalIndexB = gridParticleIndex[j];
 							float3 posB = pos[originalIndexB];
 							float3 velB = vel[originalIndexB];
-							uint typeB = types[originalIndexB];
+							uint typeB = type[originalIndexB];
 							force += collideSpheres(posA, posB, velA, velB, typeA, typeB);
 						}
 					}
@@ -165,7 +165,7 @@ __global__ void updateD(
 	float3 *pos,
 	float3 *vel,
 	float3 *accel,
-	uint* types,
+	uint* type,
 	uint* gridParticleIndex,  // input: sorted particle indices
 	uint numParticles,
 	float deltaT
@@ -179,7 +179,7 @@ __global__ void updateD(
 	float3 posA = pos[index];
 	float3 velA = vel[index];
 	float3 accelA = accel[index];
-	uint typeA = types[index];
+	uint typeA = type[index];
 
 	float radiusA = protos.radius[typeA];
 	float restitution = protos.restitution[typeA][typeA];

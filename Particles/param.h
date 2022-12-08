@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "constant.h"
+
 #include <vector_types.h>
 
 using uint = unsigned int;
@@ -26,8 +28,8 @@ struct SimParams {
 };
 
 struct SimProtos {
-    float radius[4];
-    float mass[4];
-    float damping[4][4];
-    float restitution[4][4];
+    float radius[PROTO_NUM];
+    float mass[PROTO_NUM];
+    float damping[PROTO_NUM][PROTO_NUM];
+    float restitution[PROTO_NUM][PROTO_NUM];
 };

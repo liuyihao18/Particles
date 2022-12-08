@@ -14,5 +14,11 @@ public:
 	QVector3D diffuse;
 	QVector3D specular;
 	float shininess{ 1.0f };
+
+public:
+	static Material ruby();
+	static Material emerald();
+	static Material silver();
+	static Material gold();
 };
 

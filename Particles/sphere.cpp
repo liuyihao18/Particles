@@ -3,9 +3,10 @@
 
 #include <QVector>
 
-Sphere::Sphere(const QVector3D& position, float radius, const Material& material)
-	: position(position), radius(radius), material(material)
+Sphere::Sphere(float mass, float radius, const Material& material)
+	: mass(mass), radius(radius), material(material)
 {
+    
 }
 
 Sphere::~Sphere()
@@ -49,4 +50,29 @@ void Sphere::GetIndices(QVector<unsigned int>& sphereIndices)
             sphereIndices.push_back(i * (X_SEGMENTS + 1) + j + 1);
         }
     }
+}
+
+Sphere Sphere::GetProto(unsigned int type)
+{
+    switch (type) {
+    case 1:
+        return Sphere(
+            1.0f, 1.0f / 32.0f, Material::ruby()
+        );
+    case 2:
+        return Sphere(
+            1.0f, 1.0f / 32.0f, Material::emerald()
+        );
+    case 3:
+        return Sphere(
+            1.5f, 1.0f / 48.0f, Material::silver()
+        );
+    case 4:
+        return Sphere(
+            2.0f, 1.0f / 64.0f, Material::gold()
+        );
+    }
+    return Sphere(
+        1.0f, 1.0f, Material::ruby()
+    );
 }

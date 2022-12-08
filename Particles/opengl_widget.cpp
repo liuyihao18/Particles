@@ -226,7 +226,6 @@ void OpenGLWidget::loadSphere()
         QVector3D(0.5f, 0.5f, 0.5f),
         32.0f
     );
-    sphere = Sphere({ 0, 0, 0 }, 0.2, material);
 }
 
 void OpenGLWidget::loadCube()
@@ -314,6 +313,7 @@ void OpenGLWidget::drawSphere()
         sphereShaderProgram.setUniformValue("light.specular", light.specular());
 
         // Material
+        Sphere sphere = Sphere::GetProto(0);
         sphereShaderProgram.setUniformValue("material.ambient", sphere.material.ambient);
         sphereShaderProgram.setUniformValue("material.diffuse", sphere.material.diffuse);
         sphereShaderProgram.setUniformValue("material.specular", sphere.material.specular);
@@ -324,7 +324,7 @@ void OpenGLWidget::drawSphere()
         sphereShaderProgram.setUniformValue("view", view);
         sphereShaderProgram.setUniformValue("projection", projection);
         QMatrix4x4 model;
-        model.translate(sphere.position);
+        model.translate(QVector3D(0, 0, 0));
         model.scale(sphere.radius);
         sphereShaderProgram.setUniformValue("model", model);
 
