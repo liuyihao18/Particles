@@ -166,12 +166,15 @@ __global__ void updateD(
 	float3 *vel,
 	float3 *accel,
 	uint* types,
+	uint* gridParticleIndex,  // input: sorted particle indices
 	uint numParticles,
 	float deltaT
 ) {
 	uint index = GET_INDEX;
 
 	if (index >= numParticles) return;
+
+	index = gridParticleIndex[index];
 
 	float3 posA = pos[index];
 	float3 velA = vel[index];

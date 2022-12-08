@@ -65,7 +65,7 @@ extern "C" {
         computeGridSize(numParticles, 256, numBlocks, numThreads);
 
         // calculate the hash value of every sphere
-        calcHashD <<<numBlocks, numThreads>>> (gridParticleHash, gridParticleIndex, (float3*)pos, numParticles);
+        calcHashD <<< numBlocks, numThreads >>> (gridParticleHash, gridParticleIndex, (float3*)pos, numParticles);
         getLastCudaError("calcHashD execution failed.");
     }
 
@@ -83,7 +83,7 @@ extern "C" {
 
         // set all cells to empty
         checkCudaErrors(cudaMemset(cellStart, 0xffffffff, numCells * sizeof(uint)));
-        findCellStartD <<<numBlocks, numThreads>>> (cellStart, cellEnd, gridParticleHash, numParticles);
+        findCellStartD <<< numBlocks, numThreads >>> (cellStart, cellEnd, gridParticleHash, numParticles);
         getLastCudaError("findCellStartD execution failed.");
     }
 
@@ -97,11 +97,11 @@ extern "C" {
         computeGridSize(numParticles, 256, numBlocks, numThreads);
 
         // compute collision
-        collideD <<<numBlocks, numThreads>>> ((float3*)accel, (float3*)pos, (float3*)vel, types, gridParticleIndex, cellStart, cellEnd, numParticles);
+        collideD <<< numBlocks, numThreads >>> ((float3*)accel, (float3*)pos, (float3*)vel, types, gridParticleIndex, cellStart, cellEnd, numParticles);
         getLastCudaError("collideD execution failed.");
 
         // update
-        updateD <<<numBlocks, numThreads>>> ((float3*)pos, (float3*)vel, (float3*)accel, types, numParticles, deltaT);
+        updateD <<< numBlocks, numThreads >>> ((float3*)pos, (float3*)vel, (float3*)accel, types, gridParticleIndex, numParticles, deltaT);
         getLastCudaError("updateD execution failed.");
     }
 
