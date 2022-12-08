@@ -20,6 +20,7 @@ public:
 
 protected:
     void initParams();
+    void initParticles();
     void initialize();
     void finalize();
 
@@ -43,12 +44,12 @@ private:
     uint* dParticleHash;
     uint* dParticleIndex;
     uint* dCellStart;
-    uint* dCelllEnd;
+    uint* dCellEnd;
 
     // params
     SimParams params;
     SimProtos protos;
-    float3 cellSize;
+    float cellSize;
     uint numCells;
 
     // container

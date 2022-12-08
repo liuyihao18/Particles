@@ -17,9 +17,9 @@ __constant__ SimProtos protos;
 
 __device__ int3 calcGridPos(float3 p) {
 	int3 gridPos = {
-		static_cast<int>(floorf(p.x / params.cellSize.x)),
-		static_cast<int>(floorf(p.y / params.cellSize.y)),
-		static_cast<int>(floorf(p.z / params.cellSize.z))
+		static_cast<int>(floorf(p.x / params.cellSize)),
+		static_cast<int>(floorf(p.y / params.cellSize)),
+		static_cast<int>(floorf(p.z / params.cellSize))
 	};
 	return gridPos;
 }
