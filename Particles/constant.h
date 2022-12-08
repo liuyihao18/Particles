@@ -3,7 +3,9 @@
 constexpr float PI = 3.14159265358979323846f;
 constexpr float E = 2.71828182845904523536f;
 
-constexpr int PARTICLE_NUM = 27;
+constexpr float FPS = 60.0f;
+
+constexpr int PARTICLE_NUM = 729;
 constexpr int PROTO_NUM = 4;
 constexpr int GRID_SIZE = 64;
 

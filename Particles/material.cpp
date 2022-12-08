@@ -1,4 +1,5 @@
 #include "material.h"
+#include "utils.h"
 
 Material::Material(const QVector3D& ambient, const QVector3D& diffuse, const QVector3D& specular, float shininess)
 	: ambient(ambient), diffuse(diffuse), specular(specular), shininess(shininess)
@@ -46,5 +47,15 @@ Material Material::gold()
 		QVector3D(0.75164f, 0.60648f, 0.22648f),
 		QVector3D(0.628281f, 0.555802f, 0.366065f),
 		51.2f
+	);
+}
+
+Material Material::random()
+{
+	return Material(
+		randomVector(),
+		randomVector(),
+		randomVector(),
+		randomFloat(0.0f, 100.0f)
 	);
 }

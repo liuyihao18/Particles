@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "camera.h"
+#include "constant.h"
 #include "light.h"
 #include "sphere.h"
 #include "cube.h"
@@ -44,7 +45,7 @@ private:
 
 private:
 	float zoom{ 30.0f };
-	float fps{ 60.0f };
+	float fps{ FPS };
 	int mouse_x{ 0 }, mouse_y{ 0 };
 
 	Camera camera;

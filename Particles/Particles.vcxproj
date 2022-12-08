@@ -135,6 +135,7 @@
     <ClInclude Include="param.h" />
     <ClInclude Include="sphere.h" />
     <ClInclude Include="system.h" />
+    <ClInclude Include="utils.h" />
     <QtMoc Include="gui_handler.h" />
   </ItemGroup>
   <ItemGroup>

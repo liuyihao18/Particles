@@ -20,5 +20,6 @@ public:
 	static Material emerald();
 	static Material silver();
 	static Material gold();
+	static Material random();
 };
 

@@ -1,5 +1,4 @@
 ﻿#include "opengl_widget.h"
-#include "constant.h"
 #include "gui_handler.h"
 
 #include <QKeyEvent>
@@ -26,7 +25,7 @@ void OpenGLWidget::initializeGL()
 
     /* Camera */
     camera = Camera(
-        QVector3D(-0.05f, 0.05f, 0.5f),
+        QVector3D(-0.25f, 0.28f, 0.33f),
         QVector3D(0, 1, 0),
         QVector3D(0, 0, 0),
         3.0f
@@ -88,6 +87,9 @@ void OpenGLWidget::keyPressEvent(QKeyEvent* e)
     case Qt::Key_X:
         zoomIn(-2);
         break;
+    case Qt::Key_C:
+        qDebug() << "Camera:" << camera.getPosition();
+        break;
     }
 }
 
@@ -133,7 +135,6 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent* e)
 void OpenGLWidget::wheelEvent(QWheelEvent* e)
 {
     zoomIn(2 * (e->angleDelta().y() / 120));
-    qDebug() << camera.getPosition();
 }
 
 void OpenGLWidget::onTimeout()

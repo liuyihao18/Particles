@@ -1,10 +1,9 @@
 #include "system.h"
+#include "utils.h"
 #include "sphere.h"
 #include "system.cuh"
 
 #include <helper_math.h>
-
-#include <random>
 
 System::System(uint numParticles, const QVector3D& origin, float size)
     : numParticles(numParticles), origin(origin), size(size), 
@@ -77,16 +76,6 @@ void System::initParams()
     params.friction = FRICTION;
 }
 
-inline float random() {
-    static std::uniform_real_distribution<float> dis(0.0, 1.0);
-    static std::mt19937 gen{ std::random_device{}() };
-    return dis(gen);
-}
-
-inline float random(float min, float max) {
-    return min + (max - min) * random();
-}
-
 void System::initParticles()
 {
     // Initialize as cubic
@@ -99,12 +88,12 @@ void System::initParticles()
             for (int z = 0; z < cubeSize; z++) {
                 int index = (x * cubeSize + y) * cubeSize + z;
                 if (index < numParticles) {
-                    hPos[index * 3] = origin.x() + (x - cubeSize / 2.0) * cellSize + cellCenter + random(0, posRandomMax);
-                    hPos[index * 3 + 1] = origin.y() + (y - cubeSize / 2.0) * cellSize + cellCenter + random(0, posRandomMax);
-                    hPos[index * 3 + 2] = origin.z() + (z - cubeSize / 2.0) * cellSize + cellCenter + random(0, posRandomMax);
-                    hVel[index * 3] = random(0, velRandomMax);
-                    hVel[index * 3 + 1] = random(0, velRandomMax);
-                    hVel[index * 3 + 2] = random(0, velRandomMax);
+                    hPos[index * 3] = origin.x() + (x - cubeSize / 2.0) * cellSize + cellCenter + randomFloat(0, posRandomMax);
+                    hPos[index * 3 + 1] = origin.y() + (y - cubeSize / 2.0) * cellSize + cellCenter + randomFloat(0, posRandomMax);
+                    hPos[index * 3 + 2] = origin.z() + (z - cubeSize / 2.0) * cellSize + cellCenter + randomFloat(0, posRandomMax);
+                    hVel[index * 3] = randomFloat(0, velRandomMax);
+                    hVel[index * 3 + 1] = randomFloat(0, velRandomMax);
+                    hVel[index * 3 + 2] = randomFloat(0, velRandomMax);
                     hType[index] = rand() % PROTO_NUM;
                 }
             }
