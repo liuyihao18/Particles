@@ -55,19 +55,19 @@ void Sphere::GetIndices(QVector<unsigned int>& sphereIndices)
 Sphere Sphere::GetProto(unsigned int type)
 {
     switch (type) {
-    case 1:
+    case 0:
         return Sphere(
             1.0f, 1.0f / 32.0f, Material::ruby()
         );
-    case 2:
+    case 1:
         return Sphere(
             1.0f, 1.0f / 32.0f, Material::emerald()
         );
-    case 3:
+    case 2:
         return Sphere(
             1.5f, 1.0f / 48.0f, Material::silver()
         );
-    case 4:
+    case 3:
         return Sphere(
             2.0f, 1.0f / 64.0f, Material::gold()
         );

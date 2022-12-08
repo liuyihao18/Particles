@@ -25,10 +25,10 @@ void OpenGLWidget::initializeGL()
 
     /* Camera */
     camera = Camera(
-        QVector3D(0.0f, 0.15f, -1.5f),
-        QVector3D(0, 0, 1),
+        QVector3D(-0.05f, 0.05f, 0.5f),
+        QVector3D(0, 1, 0),
         QVector3D(0, 0, 0),
-        5.0f
+        3.0f
     );
 
     /* Perspective */
@@ -185,8 +185,8 @@ void OpenGLWidget::loadLight()
 
     /* Model */
     light = Light(
-        QVector3D(0.0f, 2.0f, 0.0f),
-        QVector3D(1.0f, 0.9f, 1.0f),
+        QVector3D(0.0f, 0.55f, 0.0f),
+        QVector3D(1.0f, 1.0f, 1.0f),
         0.2f,
         0.5f
     );
@@ -218,14 +218,6 @@ void OpenGLWidget::loadSphere()
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-
-    /* Model */
-    Material material(
-        QVector3D(1.0f, 0.5f, 0.31f),
-        QVector3D(1.0f, 0.5f, 0.31f),
-        QVector3D(0.5f, 0.5f, 0.5f),
-        32.0f
-    );
 }
 
 void OpenGLWidget::loadCube()
@@ -261,7 +253,7 @@ void OpenGLWidget::loadCube()
     /* Position */
     cube = Cube(
         QVector3D(0, 0, 0),
-        3.0f
+        1.0f
     );
 }
 

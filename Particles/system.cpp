@@ -25,3 +25,7 @@ void System::initialize()
 
 
 }
+
+void System::finalize()
+{
+}

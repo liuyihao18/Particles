@@ -42,7 +42,7 @@ private:
 	void zoomIn(int);
 
 private:
-	float zoom{ 60.0f };
+	float zoom{ 30.0f };
 	float fps{ 60.0f };
 	int mouse_x{ 0 }, mouse_y{ 0 };
 
