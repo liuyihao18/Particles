@@ -24,11 +24,11 @@ extern "C" {
         }
     }
 
-    void allocateArray(void** devPtr, size_t size) {
+    void allocateArray(void** devPtr, uint size) {
         checkCudaErrors(cudaMalloc(devPtr, size));
     }
 
-    void initializeArray(void* devPtr, size_t size) {
+    void initializeArray(void* devPtr, uint size) {
         checkCudaErrors(cudaMemset(devPtr, 0, size));
     }
 
@@ -36,7 +36,7 @@ extern "C" {
         checkCudaErrors(cudaFree(devPtr));
     }
 
-    void copyArrayFromDevice(void* host, const void* device, size_t size) {
+    void copyArrayFromDevice(void* host, const void* device, uint size) {
         checkCudaErrors(cudaMemcpy(host, device, size, cudaMemcpyDeviceToHost));
     }
 

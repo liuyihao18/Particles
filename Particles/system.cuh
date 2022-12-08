@@ -9,11 +9,11 @@
 extern "C" {
     void cudaInit(int argc, char** argv);
 
-    void allocateArray(void** devPtr, size_t size);
-    void initializeArray(void* devPtr, size_t size);
+    void allocateArray(void** devPtr, uint size);
+    void initializeArray(void* devPtr, uint size);
     void freeArray(void* devPtr);
 
-    void copyArrayFromDevice(void* host, const void* device, size_t size);
+    void copyArrayFromDevice(void* host, const void* device, uint size);
     void copyArrayToDevice(void* device, const void* host, int offset, int size);
 
     void setParameters(SimParams* hostParams);

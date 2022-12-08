@@ -109,6 +109,7 @@
     <ClCompile Include="material.cpp" />
     <ClCompile Include="opengl_widget.cpp" />
     <ClCompile Include="sphere.cpp" />
+    <ClCompile Include="system.cpp" />
     <ClCompile Include="widget.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -134,6 +135,7 @@
     <ClInclude Include="morton.cuh" />
     <ClInclude Include="param.h" />
     <ClInclude Include="sphere.h" />
+    <ClInclude Include="system.h" />
     <QtMoc Include="gui_handler.h" />
   </ItemGroup>
   <ItemGroup>
