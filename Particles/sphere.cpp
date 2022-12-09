@@ -1,12 +1,12 @@
 #include "sphere.h"
-#include "constant.h"
 
 #include <QVector>
 
-Sphere::Sphere(float mass, float radius, const Material& material)
-	: mass(mass), radius(radius), material(material)
-{
-    
+Sphere* Sphere::protos[PROTO_NUM] = { nullptr };
+
+Sphere::Sphere(float mass, float radius)
+	: mass(mass), radius(radius) 
+{    
 }
 
 Sphere::~Sphere()
@@ -52,27 +52,29 @@ void Sphere::GetIndices(QVector<unsigned int>& sphereIndices)
     }
 }
 
-Sphere Sphere::GetProto(unsigned int type)
+Sphere* Sphere::GetProto(unsigned int type)
 {
     switch (type) {
     case 0:
-        return Sphere(
-            1.0f, 1.0f / 32.0f, Material::ruby()
-        );
+        if (!protos[type]) {
+            protos[type] = new Sphere(4.0f, 1.0f / 32.0f);
+        }
+        return protos[type];
     case 1:
-        return Sphere(
-            1.0f, 1.0f / 32.0f, Material::emerald()
-        );
+        if (!protos[type]) {
+            protos[type] = new Sphere(1.5f, 1.0f / 40.0f);
+        }
+        return protos[type];
     case 2:
-        return Sphere(
-            1.5f, 1.0f / 48.0f, Material::silver()
-        );
+        if (!protos[type]) {
+            protos[type] = new Sphere(2.3f, 1.0f / 48.0f);
+        }
+        return protos[type];
     case 3:
-        return Sphere(
-            2.0f, 1.0f / 64.0f, Material::gold()
-        );
+        if (!protos[type]) {
+            protos[type] = new Sphere(2.7f, 1.0f / 64.0f);
+        }
+        return protos[type];
     }
-    return Sphere(
-        1.0f, 1.0f, Material::ruby()
-    );
+    return nullptr;
 }

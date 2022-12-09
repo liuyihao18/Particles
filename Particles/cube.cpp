@@ -2,6 +2,8 @@
 
 #include <QVector>
 
+Cube* Cube::container = nullptr;
+
 Cube::Cube(const QVector3D& position, float size)
 	: position(position), size(size)
 {
@@ -64,7 +66,10 @@ void Cube::GetIndices(QVector<unsigned int>& cubeIndices)
 {
 }
 
-Cube Cube::GetContainer()
+Cube* Cube::GetContainer()
 {
-    return Cube(QVector3D(0, 0, 0), 1.0f);
+    if (!container) {
+        container = new Cube(QVector3D(0, 0, 0), 1.0f);
+    }
+    return container;
 }

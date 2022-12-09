@@ -7,6 +7,7 @@
 #define QT_BEGIN_NAMESPACE
 #define QT_END_NAMESPACE }
 #define QT_END_NAMESPACE
+#define slots
 #define __forceinline__ __inline__ __attribute__((always_inline))
 #define __forceinline__
 #define __global__ __location__(global)

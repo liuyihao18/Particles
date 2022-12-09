@@ -1,5 +1,6 @@
 #pragma once
 
+#include "constant.h"
 #include "material.h"
 
 #include <QVector3D>
@@ -11,19 +12,19 @@ class Sphere
 {
 private:
 	Sphere() = default;
-	Sphere(float mass, float radius, const Material& material);
+	Sphere(float mass, float radius);
 public:
 	~Sphere();
 
 public:
 	float mass{ 1.0f };
 	float radius{ 1.0f };
-	Material material;
 
 public:
 	static constexpr char VERT_PATH[] = ":/shader/sphere.vert";
 	static constexpr char FRAG_PATH[] = ":/shader/sphere.frag";
 	static void GetVertices(QVector<float>& sphereVertices);
 	static void GetIndices(QVector<unsigned int>& sphereIndices);
-	static Sphere GetProto(unsigned int type);
+	static Sphere* protos[PROTO_NUM];
+	static Sphere* GetProto(unsigned int type);
 };

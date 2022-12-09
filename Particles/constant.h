@@ -11,7 +11,7 @@ constexpr int GRID_SIZE = 64;
 
 constexpr float DECAY = 0.9999f;
 constexpr float GRAVITY = 0.2f;
-constexpr float SPRING = 1000.0f;
+constexpr float SPRING = 100.0f;
 constexpr float DAMPING = 8.0f;
 constexpr float FRICTION = 0.05f;
 

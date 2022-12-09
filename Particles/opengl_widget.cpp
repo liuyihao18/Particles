@@ -7,7 +7,7 @@
 
 OpenGLWidget::OpenGLWidget(QWidget* parent)
     : QOpenGLWidget(parent), timer(new QTimer(this)),
-    system(PARTICLE_NUM, Cube::GetContainer().position, Cube::GetContainer().size)
+    system(PARTICLE_NUM, Cube::GetContainer()->position, Cube::GetContainer()->size)
 {
     grabKeyboard();
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
@@ -38,6 +38,9 @@ void OpenGLWidget::initializeGL()
     loadSphere();
     loadCube();
     loadLight();
+
+    /* Material */
+    initMaterial();
 
     /* Refresh */
     timer->start(1 / fps);
@@ -141,6 +144,13 @@ void OpenGLWidget::onTimeout()
 {
     system.update(1 / fps);
     update();
+}
+
+void OpenGLWidget::initMaterial()
+{
+    for (int i = 0; i < PARTICLE_NUM; i++) {
+        materials.push_back(Material::random());
+    }
 }
 
 void OpenGLWidget::compileShaderProgram(QOpenGLShaderProgram& shaderProgram, const QString& vert, const QString& frag)
@@ -262,8 +272,8 @@ void OpenGLWidget::drawCube()
         cubeShaderProgram.setUniformValue("view", view);
         cubeShaderProgram.setUniformValue("projection", projection);
         QMatrix4x4 model;
-        model.translate(Cube::GetContainer().position);
-        model.scale(Cube::GetContainer().size);
+        model.translate(Cube::GetContainer()->position);
+        model.scale(Cube::GetContainer()->size);
         cubeShaderProgram.setUniformValue("model", model);
 
         glBindVertexArray(cubeVAO);
@@ -310,16 +320,15 @@ void OpenGLWidget::drawSphere()
         for (int i = 0; i < PARTICLE_NUM; i++) {
             QVector3D position(pos[3 * i], pos[3 * i + 1], pos[3 * i + 2]);
             // Material
-            Sphere sphere = Sphere::GetProto(type[i]);
-            sphereShaderProgram.setUniformValue("material.ambient", sphere.material.ambient);
-            sphereShaderProgram.setUniformValue("material.diffuse", sphere.material.diffuse);
-            sphereShaderProgram.setUniformValue("material.specular", sphere.material.specular);
-            sphereShaderProgram.setUniformValue("material.shininess", sphere.material.shininess);
+            sphereShaderProgram.setUniformValue("material.ambient", materials[i].ambient);
+            sphereShaderProgram.setUniformValue("material.diffuse", materials[i].diffuse);
+            sphereShaderProgram.setUniformValue("material.specular", materials[i].specular);
+            sphereShaderProgram.setUniformValue("material.shininess", materials[i].shininess);
 
             // Model
             QMatrix4x4 model;
             model.translate(position);
-            model.scale(sphere.radius);
+            model.scale(Sphere::GetProto(type[i])->radius);
             sphereShaderProgram.setUniformValue("model", model);
 
             glBindVertexArray(sphereVAO);

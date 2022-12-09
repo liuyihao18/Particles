@@ -56,6 +56,6 @@ Material Material::random()
 		randomVector(),
 		randomVector(),
 		randomVector(),
-		randomFloat(0.0f, 100.0f)
+		randomFloat(16.0f, 64.0f)
 	);
 }

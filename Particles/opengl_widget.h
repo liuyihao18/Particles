@@ -34,6 +34,7 @@ protected slots:
 	void onTimeout();
 
 private:
+	void initMaterial();
 	void compileShaderProgram(QOpenGLShaderProgram&, const QString&, const QString&);
 	void loadLight();
 	void loadCube();
@@ -57,4 +58,5 @@ private:
 private:
 	QOpenGLShaderProgram sphereShaderProgram, cubeShaderProgram, lightShaderProgram;
 	GLuint sphereVAO{ 0 }, cubeVAO{ 0 }, lightVAO{ 0 };
+	QVector<Material> materials;
 };

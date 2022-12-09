@@ -41,10 +41,10 @@ void System::initParams()
     // compute protos
     float maxRadius = 0.0f;
     for (int i = 0; i < PROTO_NUM; i++) {
-        Sphere proto = Sphere::GetProto(i);
-        maxRadius = fmaxf(maxRadius, proto.radius);
-        protos.mass[i] = proto.mass;
-        protos.radius[i] = proto.radius;
+        Sphere* proto = Sphere::GetProto(i);
+        maxRadius = fmaxf(maxRadius, proto->radius);
+        protos.mass[i] = proto->mass;
+        protos.radius[i] = proto->radius;
         for (int j = 0; j < PROTO_NUM; j++) {
             protos.restitution[i][j] = RESTITUION[i][j];
             float temp = logf(RESTITUION[i][j]);
