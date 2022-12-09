@@ -1,7 +1,5 @@
 #include "cube.h"
 
-#include <QVector>
-
 Cube* Cube::container = nullptr;
 
 Cube::Cube(const QVector3D& position, float size)

@@ -1,7 +1,8 @@
 #pragma once
 
-#include <QtWidgets/QWidget>
 #include "ui_widget.h"
+
+#include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class WidgetClass; };

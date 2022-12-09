@@ -127,6 +127,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="camera.h" />
+    <ClInclude Include="config.h" />
     <ClInclude Include="constant.h" />
     <ClInclude Include="cube.h" />
     <ClInclude Include="kernel.cuh" />

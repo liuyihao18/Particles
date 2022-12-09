@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QVector3D>
+#include <QVector>
 
 // This cube is just used to hold the sphere.
 class Cube

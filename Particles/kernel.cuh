@@ -166,7 +166,7 @@ __global__ void collideD(
 		}
 	}
 	
-	accel[originalIndexA] = force / protos.mass[typeA];
+	accel[originalIndexA] = force / protos.mass[typeA] + params.gravity;
 }
 
 __global__ void updateD(
@@ -190,45 +190,44 @@ __global__ void updateD(
 	uint typeA = type[index];
 
 	float radiusA = protos.radius[typeA];
-	float restitutionA = protos.radius[typeA];
+	float restitutionA = -protos.restitution[typeA][typeA];
 
 	float3 minCorner = params.minCorner;
 	float3 maxCorner = params.maxCorner;
 
 	velA += accelA * deltaT;
-	velA += params.gravity * deltaT;
 	velA *= params.decay;
 
 	posA += velA * deltaT;
 
 	if (posA.x > maxCorner.x - radiusA) {
 		posA.x = maxCorner.x - radiusA;
-		velA.x *= -restitutionA;
+		velA.x *= restitutionA;
 	}
 
 	if (posA.x < minCorner.x + radiusA) {
 		posA.x = minCorner.x + radiusA;
-		velA.x *= -restitutionA;
+		velA.x *= restitutionA;
 	}
 
 	if (posA.y > maxCorner.y - radiusA) {
 		posA.y = maxCorner.y - radiusA;
-		velA.y *= -restitutionA;
+		velA.y *= restitutionA;
 	}
 
 	if (posA.y < minCorner.y + radiusA) {
 		posA.y = minCorner.y + radiusA;
-		velA.y *= -restitutionA;
+		velA.y *= restitutionA;
 	}
 
 	if (posA.z > maxCorner.z - radiusA) {
 		posA.z = maxCorner.z - radiusA;
-		velA.z *= -restitutionA;
+		velA.z *= restitutionA;
 	}
 
 	if (posA.z < minCorner.z + radiusA) {
 		posA.z = minCorner.z + radiusA;
-		velA.z *= -restitutionA;
+		velA.z *= restitutionA;
 	}
 	
 	pos[index] = posA;

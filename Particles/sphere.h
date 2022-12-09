@@ -1,9 +1,9 @@
 #pragma once
 
 #include "constant.h"
-#include "material.h"
 
 #include <QVector3D>
+#include <QVector>
 
 constexpr int Y_SEGMENTS = 50;
 constexpr int X_SEGMENTS = 50;

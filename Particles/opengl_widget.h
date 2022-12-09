@@ -1,10 +1,11 @@
 ﻿#pragma once
 
 #include "camera.h"
-#include "constant.h"
+#include "config.h"
 #include "light.h"
 #include "sphere.h"
 #include "cube.h"
+#include "material.h"
 #include "system.h"
 
 #include <QtOpenGLWidgets/QOpenGLWidget>

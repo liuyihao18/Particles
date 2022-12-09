@@ -1,7 +1,5 @@
 #include "sphere.h"
 
-#include <QVector>
-
 Sphere* Sphere::protos[PROTO_NUM] = { nullptr };
 
 Sphere::Sphere(float mass, float radius)

@@ -1,13 +1,13 @@
 ﻿#include "opengl_widget.h"
 #include "gui_handler.h"
+#include "utils.h"
 
 #include <QKeyEvent>
 #include <QMouseEvent>
-#include <QTime>
 
 OpenGLWidget::OpenGLWidget(QWidget* parent)
     : QOpenGLWidget(parent), timer(new QTimer(this)),
-    system(PARTICLE_NUM, Cube::GetContainer()->position, Cube::GetContainer()->size)
+    system(PARTICLE_NUM, make_float3(Cube::GetContainer()->position), Cube::GetContainer()->size)
 {
     grabKeyboard();
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));

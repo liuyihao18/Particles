@@ -16,6 +16,8 @@ public:
 	float shininess{ 1.0f };
 
 public:
+	// The following materials are from: 
+	// http://devernay.free.fr/cours/opengl/materials.html
 	static Material ruby();
 	static Material emerald();
 	static Material silver();

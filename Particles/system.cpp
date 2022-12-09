@@ -5,7 +5,7 @@
 
 #include <helper_math.h>
 
-System::System(uint numParticles, const QVector3D& origin, float size)
+System::System(uint numParticles, float3 origin, float size)
     : numParticles(numParticles), origin(origin), size(size), 
     numCells(GRID_SIZE * GRID_SIZE * GRID_SIZE)
 {
@@ -56,14 +56,14 @@ void System::initParams()
     params.gridSize = GRID_SIZE;
     params.cellSize = cellSize = maxRadius * 2;
     params.minCorner = make_float3(
-        origin.x() - 0.5 * size,
-        origin.y() - 0.5 * size,
-        origin.z() - 0.5 * size
+        origin.x - 0.5 * size,
+        origin.y - 0.5 * size,
+        origin.z - 0.5 * size
     );
     params.maxCorner = make_float3(
-        origin.x() + 0.5 * size,
-        origin.y() + 0.5 * size,
-        origin.z() + 0.5 * size
+        origin.x + 0.5 * size,
+        origin.y + 0.5 * size,
+        origin.z + 0.5 * size
     );
     params.gravity = make_float3(
         0,
@@ -88,9 +88,9 @@ void System::initParticles()
             for (int z = 0; z < cubeSize; z++) {
                 int index = (x * cubeSize + y) * cubeSize + z;
                 if (index < numParticles) {
-                    hPos[index * 3] = origin.x() + (x - cubeSize / 2.0) * cellSize + cellCenter + randomFloat(0, posRandomMax);
-                    hPos[index * 3 + 1] = origin.y() + (y - cubeSize / 2.0) * cellSize + cellCenter + randomFloat(0, posRandomMax);
-                    hPos[index * 3 + 2] = origin.z() + (z - cubeSize / 2.0) * cellSize + cellCenter + randomFloat(0, posRandomMax);
+                    hPos[index * 3] = origin.x + (x - cubeSize / 2.0) * cellSize + cellCenter + randomFloat(0, posRandomMax);
+                    hPos[index * 3 + 1] = origin.y + (y - cubeSize / 2.0) * cellSize + cellCenter + randomFloat(0, posRandomMax);
+                    hPos[index * 3 + 2] = origin.z + (z - cubeSize / 2.0) * cellSize + cellCenter + randomFloat(0, posRandomMax);
                     hVel[index * 3] = randomFloat(0, velRandomMax);
                     hVel[index * 3 + 1] = randomFloat(0, velRandomMax);
                     hVel[index * 3 + 2] = randomFloat(0, velRandomMax);

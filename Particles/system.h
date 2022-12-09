@@ -1,15 +1,14 @@
 #pragma once
 
 #include "param.h"
-
-#include <QVector3D>
+#include "config.h"
 
 class System
 {
 public:
     System(
         uint numParticles,
-        const QVector3D& origin,
+        float3 origin,
         float size
     );
     ~System();
@@ -49,7 +48,7 @@ private:
     uint numCells;
 
     // container
-    QVector3D origin;
+    float3 origin;
     float size;
 };
 
