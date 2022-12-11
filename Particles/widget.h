@@ -5,7 +5,10 @@
 #include <QtWidgets/QWidget>
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class WidgetClass; };
+namespace Ui
+{
+    class WidgetClass;
+};
 QT_END_NAMESPACE
 
 class Widget : public QWidget

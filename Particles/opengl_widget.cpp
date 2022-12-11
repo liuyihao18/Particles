@@ -4,11 +4,24 @@
 
 #include <QKeyEvent>
 #include <QMouseEvent>
+#include <QTime>
+#include <QInputDialog>
+#include <iostream>
 
-OpenGLWidget::OpenGLWidget(QWidget* parent)
-    : QOpenGLWidget(parent), timer(new QTimer(this)),
-    system(PARTICLE_NUM, make_float3(Cube::GetContainer()->position), Cube::GetContainer()->size)
+OpenGLWidget::OpenGLWidget(QWidget *parent)
+    : QOpenGLWidget(parent), timer(new QTimer(this))
 {
+    bool ok = false;
+    int numParticles = QInputDialog::getInt(this, tr("请输入粒子数量"), tr("粒子数量"), 
+        PARTICLE_NUM, 1, 10000, 1, &ok);
+    if (!ok) {
+        exit(0);
+    }
+    system.init(
+        numParticles,
+        make_float3(Cube::GetContainer()->position), 
+        Cube::GetContainer()->size
+    );
     grabKeyboard();
     connect(timer, SIGNAL(timeout()), this, SLOT(onTimeout()));
 }
@@ -35,9 +48,9 @@ void OpenGLWidget::initializeGL()
     projection.perspective(zoom, 1.0, 0.01, 100.0);
 
     /* Load */
-    loadSphere();
-    loadCube();
     loadLight();
+    loadCube();
+    loadSphere();
 
     /* Material */
     initMaterial();
@@ -55,15 +68,16 @@ void OpenGLWidget::paintGL()
 {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    drawSphere();
+    drawLight();
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     drawCube();
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    drawLight();
+    drawSphere();
 }
 
-void OpenGLWidget::keyPressEvent(QKeyEvent* e)
+void OpenGLWidget::keyPressEvent(QKeyEvent *e)
 {
+    // 键盘：控制移动、缩放等
     switch (e->key())
     {
     case Qt::Key_A:
@@ -91,19 +105,25 @@ void OpenGLWidget::keyPressEvent(QKeyEvent* e)
         zoomIn(-2);
         break;
     case Qt::Key_C:
-        qDebug() << "Camera:" << camera.getPosition();
+        std::cout << "Camera: (" 
+            << camera.getEye().x() << ", "
+            << camera.getEye().y() << ", "
+            << camera.getEye().z() << ")" 
+            << std::endl;
         break;
     }
 }
 
-void OpenGLWidget::mousePressEvent(QMouseEvent* e)
+void OpenGLWidget::mousePressEvent(QMouseEvent *e)
 {
+    // 鼠标：控制旋转
     mouse_x = e->pos().x();
     mouse_y = e->pos().y();
 }
 
-void OpenGLWidget::mouseMoveEvent(QMouseEvent* e)
+void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 {
+    // 鼠标：控制旋转
     int x = e->pos().x();
     int y = e->pos().y();
 
@@ -133,42 +153,65 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent* e)
 
         mouse_y = y;
     }
+
+    // 更改重力方向
+    system.setUp(make_float3(camera.getUp()));
 }
 
-void OpenGLWidget::wheelEvent(QWheelEvent* e)
+void OpenGLWidget::wheelEvent(QWheelEvent *e)
 {
+    // 鼠标：控制缩放
     zoomIn(2 * (e->angleDelta().y() / 120));
 }
 
+// 更新
 void OpenGLWidget::onTimeout()
 {
+    static int cnt = 0;
+    static int sum = 0;
+    QTime start = QTime::currentTime();
     system.update(1 / fps);
     update();
+    QTime end = QTime::currentTime();
+    sum += start.msecsTo(end);
+    cnt++;
+    if (cnt == 10) {
+        std::cout << "render time: " << sum / cnt << "ms" << "\r" << std::flush;
+        cnt = 0;
+        sum = 0;
+    }
 }
 
+// 初始化材质
 void OpenGLWidget::initMaterial()
 {
-    for (int i = 0; i < PARTICLE_NUM; i++) {
+    for (int i = 0; i < PARTICLE_NUM; i++)
+    {
         materials.push_back(Material::random());
     }
 }
 
-void OpenGLWidget::compileShaderProgram(QOpenGLShaderProgram& shaderProgram, const QString& vert, const QString& frag)
+// 编译着色器
+void OpenGLWidget::compileShaderProgram(QOpenGLShaderProgram &shaderProgram, const QString &vert, const QString &frag)
 {
     bool success = shaderProgram.addShaderFromSourceFile(QOpenGLShader::Vertex, vert);
-    if (!success) {
+    if (!success)
+    {
         GUIHandler::Inst()->err("load " + vert + " failed!");
     }
     success = shaderProgram.addShaderFromSourceFile(QOpenGLShader::Fragment, frag);
-    if (!success) {
+    if (!success)
+    {
         GUIHandler::Inst()->err("load " + frag + " failed!");
     }
     success = shaderProgram.link();
-    if (!success) {
+    if (!success)
+    {
         GUIHandler::Inst()->err("link failed!");
     }
 }
 
+// 加载灯
 void OpenGLWidget::loadLight()
 {
     /* Shader */
@@ -179,7 +222,7 @@ void OpenGLWidget::loadLight()
     QVector<unsigned int> lightIndices;
     Light::GetVertices(lightVertices);
     Light::GetIndices(lightIndices);
-    GLuint lightVBO{ 0 }, lightEBO{ 0 };
+    GLuint lightVBO{0}, lightEBO{0};
     glGenVertexArrays(1, &lightVAO);
     glGenBuffers(1, &lightVBO);
     glGenBuffers(1, &lightEBO);
@@ -189,9 +232,9 @@ void OpenGLWidget::loadLight()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, lightEBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, lightIndices.size() * sizeof(float), lightIndices.data(), GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -201,38 +244,10 @@ void OpenGLWidget::loadLight()
         QVector3D(0.0f, 0.55f, 0.0f),
         QVector3D(1.0f, 1.0f, 1.0f),
         0.2f,
-        0.5f
-    );
+        0.5f);
 }
 
-void OpenGLWidget::loadSphere()
-{
-    /* Shader */
-    compileShaderProgram(sphereShaderProgram, Sphere::VERT_PATH, Sphere::FRAG_PATH);
-
-    /* VAO, VBO and EBO */
-    QVector<float> sphereVertices;
-    QVector<unsigned int> sphereIndices;
-    Sphere::GetVertices(sphereVertices);
-    Sphere::GetIndices(sphereIndices);
-    GLuint sphereVBO{ 0 }, sphereEBO{ 0 };
-    glGenVertexArrays(1, &sphereVAO);
-    glGenBuffers(1, &sphereVBO);
-    glGenBuffers(1, &sphereEBO);
-    glBindVertexArray(sphereVAO);
-    glBindBuffer(GL_ARRAY_BUFFER, sphereVBO);
-    glBufferData(GL_ARRAY_BUFFER, sphereVertices.size() * sizeof(float), sphereVertices.data(), GL_STATIC_DRAW);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sphereEBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sphereIndices.size() * sizeof(unsigned int), sphereIndices.data(), GL_STATIC_DRAW);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
-    glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
-    glBindVertexArray(0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
-
+// 加载容器
 void OpenGLWidget::loadCube()
 {
     /* Shader */
@@ -243,7 +258,7 @@ void OpenGLWidget::loadCube()
     QVector<unsigned int> cubeIndices;
     Cube::GetVertices(cubeVertices);
     Cube::GetIndices(cubeIndices);
-    GLuint cubeVBO{ 0 }, cubeEBO{ 0 };
+    GLuint cubeVBO{0}, cubeEBO{0};
     glGenVertexArrays(1, &cubeVAO);
     glGenBuffers(1, &cubeVBO);
     glGenBuffers(1, &cubeEBO);
@@ -254,34 +269,46 @@ void OpenGLWidget::loadCube()
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, cubeIndices.size() * sizeof(float), cubeIndices.data(), GL_STATIC_DRAW);
     // position
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
     // normal
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
     // unbind
     glBindVertexArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
-void OpenGLWidget::drawCube()
+// 加载粒子
+void OpenGLWidget::loadSphere()
 {
-    cubeShaderProgram.bind();
-    {
-        QMatrix4x4 view = camera.getViewMatrix();
-        cubeShaderProgram.setUniformValue("view", view);
-        cubeShaderProgram.setUniformValue("projection", projection);
-        QMatrix4x4 model;
-        model.translate(Cube::GetContainer()->position);
-        model.scale(Cube::GetContainer()->size);
-        cubeShaderProgram.setUniformValue("model", model);
+    /* Shader */
+    compileShaderProgram(sphereShaderProgram, Sphere::VERT_PATH, Sphere::FRAG_PATH);
 
-        glBindVertexArray(cubeVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-    }
-    cubeShaderProgram.release();
+    /* VAO, VBO and EBO */
+    QVector<float> sphereVertices;
+    QVector<unsigned int> sphereIndices;
+    Sphere::GetVertices(sphereVertices);
+    Sphere::GetIndices(sphereIndices);
+    GLuint sphereVBO{0}, sphereEBO{0};
+    glGenVertexArrays(1, &sphereVAO);
+    glGenBuffers(1, &sphereVBO);
+    glGenBuffers(1, &sphereEBO);
+    glBindVertexArray(sphereVAO);
+    glBindBuffer(GL_ARRAY_BUFFER, sphereVBO);
+    glBufferData(GL_ARRAY_BUFFER, sphereVertices.size() * sizeof(float), sphereVertices.data(), GL_STATIC_DRAW);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, sphereEBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sphereIndices.size() * sizeof(unsigned int), sphereIndices.data(), GL_STATIC_DRAW);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
+    glEnableVertexAttribArray(1);
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 }
 
+// 绘制灯
 void OpenGLWidget::drawLight()
 {
     lightShaderProgram.bind();
@@ -300,13 +327,33 @@ void OpenGLWidget::drawLight()
     lightShaderProgram.release();
 }
 
+// 绘制容器
+void OpenGLWidget::drawCube()
+{
+    cubeShaderProgram.bind();
+    {
+        QMatrix4x4 view = camera.getViewMatrix();
+        cubeShaderProgram.setUniformValue("view", view);
+        cubeShaderProgram.setUniformValue("projection", projection);
+        QMatrix4x4 model;
+        model.translate(Cube::GetContainer()->position);
+        model.scale(Cube::GetContainer()->size);
+        cubeShaderProgram.setUniformValue("model", model);
+
+        glBindVertexArray(cubeVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+    }
+    cubeShaderProgram.release();
+}
+
+// 绘制粒子
 void OpenGLWidget::drawSphere()
 {
     sphereShaderProgram.bind();
     {
         // light
         sphereShaderProgram.setUniformValue("light.position", light.position);
-        sphereShaderProgram.setUniformValue("viewPos", camera.getPosition());
+        sphereShaderProgram.setUniformValue("viewPos", camera.getEye());
         sphereShaderProgram.setUniformValue("light.ambient", light.ambient());
         sphereShaderProgram.setUniformValue("light.diffuse", light.diffuse());
         sphereShaderProgram.setUniformValue("light.specular", light.specular());
@@ -315,9 +362,10 @@ void OpenGLWidget::drawSphere()
         sphereShaderProgram.setUniformValue("view", view);
         sphereShaderProgram.setUniformValue("projection", projection);
 
-        float* pos = system.getPos();
-        uint* type = system.getType();
-        for (int i = 0; i < PARTICLE_NUM; i++) {
+        float *pos = system.getPos();
+        uint *type = system.getType();
+        for (int i = 0; i < PARTICLE_NUM; i++)
+        {
             QVector3D position(pos[3 * i], pos[3 * i + 1], pos[3 * i + 2]);
             // Material
             sphereShaderProgram.setUniformValue("material.ambient", materials[i].ambient);
@@ -338,6 +386,7 @@ void OpenGLWidget::drawSphere()
     sphereShaderProgram.release();
 }
 
+// 缩放
 void OpenGLWidget::zoomIn(int z)
 {
     projection = QMatrix4x4();

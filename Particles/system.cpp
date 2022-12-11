@@ -6,15 +6,19 @@
 #include <helper_math.h>
 
 System::System(uint numParticles, float3 origin, float size)
-    : numParticles(numParticles), origin(origin), size(size),
-      numCells(GRID_SIZE * GRID_SIZE * GRID_SIZE)
 {
-    initialize();
+    initialize(numParticles, origin, size);
 }
 
 System::~System()
 {
     finalize();
+}
+
+// 初始化
+void System::init(uint numParticles, float3 origin, float size)
+{
+    initialize(numParticles, origin, size);
 }
 
 // 返回粒子的位置
@@ -41,6 +45,13 @@ void System::update(float deltaT)
 uint *System::getType()
 {
     return hType;
+}
+
+// 改变重力方向
+void System::setUp(float3 up)
+{
+    params.gravity = up * -GRAVITY;
+    setParameters(&params);
 }
 
 // 初始化参数
@@ -121,8 +132,13 @@ void System::initParticles()
 }
 
 // 初始化
-void System::initialize()
+void System::initialize(uint numParticles, float3 origin, float size)
 {
+    this->numParticles = numParticles;
+    this->origin = origin;
+    this->size = size;
+    this->numCells = GRID_SIZE * GRID_SIZE * GRID_SIZE;
+
     // CPU初始化
     hPos = new float[numParticles * 3]();
     hVel = new float[numParticles * 3]();

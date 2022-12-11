@@ -37,9 +37,9 @@ __device__ uint calcGridHash(int3 gridPos)
 
 // 计算每个粒子的哈希值
 __global__ void calcHashD(
-    uint *gridParticleHash,	 // output
+    uint *gridParticleHash,  // output
     uint *gridParticleIndex, // output
-    float3 *pos,			 // input
+    float3 *pos,             // input
     uint numParticles)
 {
     uint index = GET_INDEX;
@@ -58,8 +58,8 @@ __global__ void calcHashD(
 
 // 计算每个粒子的哈希反向索引和邻接关系
 __global__ void findCellStartD(
-    uint *cellStart,		// output
-    uint *cellEnd,			// output
+    uint *cellStart,        // output
+    uint *cellEnd,          // output
     uint *gridParticleHash, // input
     uint numParticles)
 {
@@ -132,13 +132,13 @@ __device__ float3 collideSpheres(
 
 // 计算每个粒子受到的力产生的加速度
 __global__ void collideD(
-    float3 *accel,			 // output
-    float3 *pos,			 // input
-    float3 *vel,			 // input
-    uint *type,				 // input
+    float3 *accel,           // output
+    float3 *pos,             // input
+    float3 *vel,             // input
+    uint *type,              // input
     uint *gridParticleIndex, // input: sorted particle indices
-    uint *cellStart,		 // input
-    uint *cellEnd,			 // input
+    uint *cellStart,         // input
+    uint *cellEnd,           // input
     uint numParticles)
 {
     uint index = GET_INDEX;
@@ -194,10 +194,10 @@ __global__ void collideD(
 
 // 更新每个粒子的位置和速度
 __global__ void updateD(
-    float3 *pos,			 // output
-    float3 *vel,			 // output
-    float3 *accel,			 // input
-    uint *type,				 // input
+    float3 *pos,             // output
+    float3 *vel,             // output
+    float3 *accel,           // input
+    uint *type,              // input
     uint *gridParticleIndex, // input
     uint numParticles,
     float deltaT)

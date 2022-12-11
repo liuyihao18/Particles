@@ -66,6 +66,7 @@ void Cube::GetIndices(QVector<unsigned int> &cubeIndices)
 {
 }
 
+// 获取容器
 Cube *Cube::GetContainer()
 {
     if (!container)

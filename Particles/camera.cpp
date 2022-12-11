@@ -27,9 +27,14 @@ QMatrix4x4 Camera::getViewMatrix() const
     return matrix;
 }
 
-QVector3D Camera::getPosition() const
+QVector3D Camera::getEye() const
 {
     return eye;
+}
+
+QVector3D Camera::getUp() const
+{
+    return up;
 }
 
 void Camera::translateLeft(float dis)

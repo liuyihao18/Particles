@@ -4,10 +4,11 @@
 #include <QMessageBox>
 
 Widget::Widget(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::WidgetClass())
+    : QWidget(parent), ui(new Ui::WidgetClass())
 {
     ui->setupUi(this);
+    setWindowTitle("粒子碰撞");
+    // 将GUI_HANDLER挂到窗口上
     auto handler = GUIHandler::Inst();
     connect(handler, SIGNAL(infoMsg(QString)), this, SLOT(onInfoMsgReceived(QString)));
     connect(handler, SIGNAL(warnMsg(QString)), this, SLOT(onWarnMsgReceived(QString)));
