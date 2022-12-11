@@ -32,5 +32,5 @@ struct SimProtos {
     float radius[PROTO_NUM];
     float mass[PROTO_NUM];
     float damping[PROTO_NUM][PROTO_NUM];
-    float restitution[PROTO_NUM][PROTO_NUM];
+    float elasticity[PROTO_NUM][PROTO_NUM];
 };

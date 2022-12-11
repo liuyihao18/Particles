@@ -10,7 +10,7 @@ constexpr float SPRING = 222.0f;
 constexpr float DAMPING = 8.0f;
 constexpr float FRICTION = 0.05f;
 
-constexpr float RESTITUION[4][4] = {
+constexpr float ELASTICITY[4][4] = {
 	0.9f, 0.9f, 0.7f, 0.8f,
 	0.9f, 0.9f, 0.7f, 0.8f,
 	0.7f, 0.7f, 0.4f, 0.5f,

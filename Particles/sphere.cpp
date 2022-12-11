@@ -73,6 +73,11 @@ Sphere* Sphere::GetProto(unsigned int type)
             protos[type] = new Sphere(2.7f, 1.0f / 64.0f);
         }
         return protos[type];
+    case 4:
+        if (!protos[type]) {
+            protos[type] = new Sphere(10.0f, 1.0f / 24.0f);
+        }
+        return protos[type];
     }
     return nullptr;
 }

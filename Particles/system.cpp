@@ -46,8 +46,8 @@ void System::initParams()
         protos.mass[i] = proto->mass;
         protos.radius[i] = proto->radius;
         for (int j = 0; j < PROTO_NUM; j++) {
-            protos.restitution[i][j] = RESTITUION[i][j];
-            float temp = logf(RESTITUION[i][j]);
+            protos.elasticity[i][j] = ELASTICITY[i][j];
+            float temp = logf(ELASTICITY[i][j]);
             protos.damping[i][j] = -2 * temp / sqrtf(temp * temp + PI * PI);
         }
     }

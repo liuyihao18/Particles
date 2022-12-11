@@ -190,7 +190,7 @@ __global__ void updateD(
 	uint typeA = type[index];
 
 	float radiusA = protos.radius[typeA];
-	float restitutionA = -protos.restitution[typeA][typeA];
+	float restitutionA = -protos.elasticity[typeA][typeA];
 
 	float3 minCorner = params.minCorner;
 	float3 maxCorner = params.maxCorner;
