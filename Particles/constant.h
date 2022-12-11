@@ -6,5 +6,5 @@ constexpr float E = 2.71828182845904523536f;
 // 粒子原型的数目
 constexpr int PROTO_NUM = 5;
 
-// 网格大小 = 哈希大小 = 64 * 64 * 64
+// 单元数 = 哈希大小 = 64 * 64 * 64
 constexpr int GRID_SIZE = 64;

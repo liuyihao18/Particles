@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "param.h"
 #include "config.h"
@@ -13,42 +13,53 @@ public:
     );
     ~System();
 
-    float* getPos();
+    // 返回粒子的位置
+    float *getPos();
+
+    // 更新粒子的位置
     void update(float deltaT);
-    uint* getType();
+
+    // 返回粒子的种类
+    uint *getType();
 
 protected:
+    // 初始化参数
     void initParams();
+
+    // 初始化粒子
     void initParticles();
+
+    // 初始化
     void initialize();
+
+    // 后处理
     void finalize();
 
 private:
     uint numParticles;
 
-    // CPU data
-    float* hPos;
-    float* hVel;
-    uint* hType;
+    /* CPU */
+    float *hPos; // 位置
+    float *hVel; // 速度
+    uint *hType; // 类型
 
-    // GPU data
-    float* dPos;
-    float* dVel;
-    float* dAccel;
-    uint* dType;
-    uint* dGridParticleHash;
-    uint* dGridParticleIndex;
-    uint* dCellStart;
-    uint* dCellEnd;
+    /* GPU */
+    float *dPos;              // 位置
+    float *dVel;              // 速度
+    float *dAccel;            // 加速度
+    uint *dType;              // 类型
+    uint *dGridParticleHash;  // 哈希
+    uint *dGridParticleIndex; // 索引
+    uint *dCellStart;         // 哈希反向索引起始
+    uint *dCellEnd;           // 哈希反向索引结束
 
-    // params
-    SimParams params;
-    SimProtos protos;
-    float cellSize;
-    uint numCells;
+    /* 参数 */
+    SimParams params; // 环境
+    SimProtos protos; // 原型
+    float cellSize;   // 单元大小
+    uint numCells;    // 单元数
 
-    // container
-    float3 origin;
-    float size;
+    /* 容器 */
+    float3 origin; // 原点
+    float size;    // 大小
 };
-

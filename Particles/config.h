@@ -1,16 +1,19 @@
-#pragma once
+﻿#pragma once
 #include "constant.h"
 
 constexpr float FPS = 60.0f;
 
+// 粒子的数目
 constexpr int PARTICLE_NUM = 5 * 5 * 5;
 
-constexpr float DECAY = 0.9999f;
-constexpr float GRAVITY = 0.2f;
-constexpr float SPRING = 222.0f;
-constexpr float DAMPING = 8.0f;
-constexpr float FRICTION = 0.05f;
+/* 物理量配置 */
+constexpr float DECAY = 0.9999f;  // 衰减
+constexpr float GRAVITY = 0.2f;	  // 重力
+constexpr float SPRING = 222.0f;  // 弹力
+constexpr float DAMPING = 8.0f;	  // 阻尼
+constexpr float FRICTION = 0.05f; // 摩擦
 
+// 弹性
 constexpr float ELASTICITY[PROTO_NUM][PROTO_NUM] = {
 	0.9f, 0.9f, 0.7f, 0.8f, 0.6f,
 	0.9f, 0.9f, 0.7f, 0.8f, 0.5f,
@@ -18,4 +21,3 @@ constexpr float ELASTICITY[PROTO_NUM][PROTO_NUM] = {
 	0.8f, 0.8f, 0.5f, 0.6f, 0.9f,
 	0.5f, 0.9f, 0.6f, 0.7f, 0.8f
 };
-
