@@ -23,6 +23,8 @@ protected slots:
     void onInfoMsgReceived(QString);
     void onWarnMsgReceived(QString);
     void onErrMsgReceived(QString);
+    void onRenderTimeChanged(int);
+    void onCameraChanged(QVector3D, QVector3D);
 
 private:
     Ui::WidgetClass *ui;

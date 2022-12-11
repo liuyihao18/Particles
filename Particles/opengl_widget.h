@@ -31,6 +31,10 @@ protected:
     void mouseMoveEvent(QMouseEvent *) override;
     void wheelEvent(QWheelEvent *) override;
 
+signals:
+    void renderTimeChange(int);
+    void cameraChange(QVector3D, QVector3D);
+
 protected slots:
     void onTimeout();
 

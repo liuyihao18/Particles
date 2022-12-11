@@ -6,7 +6,6 @@
 #include <QMouseEvent>
 #include <QTime>
 #include <QInputDialog>
-#include <iostream>
 
 OpenGLWidget::OpenGLWidget(QWidget *parent)
     : QOpenGLWidget(parent), timer(new QTimer(this))
@@ -43,6 +42,7 @@ void OpenGLWidget::initializeGL()
         QVector3D(0, 0, 0),
         3.0f
     );
+    emit cameraChange(camera.getEye(), camera.getCenter());
 
     /* Perspective */
     projection.perspective(zoom, 1.0, 0.01, 100.0);
@@ -104,14 +104,10 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *e)
     case Qt::Key_X:
         zoomIn(-2);
         break;
-    case Qt::Key_C:
-        std::cout << "Camera: (" 
-            << camera.getEye().x() << ", "
-            << camera.getEye().y() << ", "
-            << camera.getEye().z() << ")" 
-            << std::endl;
         break;
     }
+
+    emit cameraChange(camera.getEye(), camera.getCenter());
 }
 
 void OpenGLWidget::mousePressEvent(QMouseEvent *e)
@@ -156,6 +152,7 @@ void OpenGLWidget::mouseMoveEvent(QMouseEvent *e)
 
     // 更改重力方向
     system.setUp(make_float3(camera.getUp()));
+    emit cameraChange(camera.getEye(), camera.getCenter());
 }
 
 void OpenGLWidget::wheelEvent(QWheelEvent *e)
@@ -176,9 +173,7 @@ void OpenGLWidget::onTimeout()
     sum += start.msecsTo(end);
     cnt++;
     if (cnt == 10) {
-        std::cout << "render time: " << sum / cnt << "ms" << "\r" << std::flush;
-        cnt = 0;
-        sum = 0;
+        emit renderTimeChange(sum / cnt);
     }
 }
 

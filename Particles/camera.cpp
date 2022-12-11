@@ -37,6 +37,11 @@ QVector3D Camera::getUp() const
     return up;
 }
 
+QVector3D Camera::getCenter() const
+{
+    return center;
+}
+
 void Camera::translateLeft(float dis)
 {
     QVector3D z = (eye - center).normalized();

@@ -25,3 +25,16 @@ inline float3 make_float3(const QVector3D &vec)
 {
     return {vec.x(), vec.y(), vec.z()};
 }
+
+inline QString vecToString(const QVector3D &vec) 
+{
+    QString str;
+    str += "(";
+    str += QString::number(vec.x(), 'f', 2);
+    str += ", ";
+    str += QString::number(vec.y(), 'f', 2);
+    str += ", ";
+    str += QString::number(vec.z(), 'f', 2);
+    str += ")";
+    return str;
+}
