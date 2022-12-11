@@ -1,4 +1,4 @@
-﻿#include "widget.h"
+#include "widget.h"
 #include "gui_handler.h"
 
 #include <QMessageBox>

@@ -1,4 +1,4 @@
-﻿#include "system.h"
+#include "system.h"
 #include "utils.h"
 #include "sphere.h"
 #include "system.cuh"

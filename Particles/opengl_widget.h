@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #include "camera.h"
 #include "config.h"
@@ -16,48 +16,48 @@
 
 class OpenGLWidget : public QOpenGLWidget, protected QOpenGLFunctions_3_3_Core
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	OpenGLWidget(QWidget* parent);
-	~OpenGLWidget();
+    OpenGLWidget(QWidget* parent);
+    ~OpenGLWidget();
 
 protected:
-	void initializeGL() override;
-	void resizeGL(int, int) override;
-	void paintGL() override;
-	void keyPressEvent(QKeyEvent*) override;
-	void mousePressEvent(QMouseEvent*) override;
-	void mouseMoveEvent(QMouseEvent*) override;
-	void wheelEvent(QWheelEvent*) override;
+    void initializeGL() override;
+    void resizeGL(int, int) override;
+    void paintGL() override;
+    void keyPressEvent(QKeyEvent*) override;
+    void mousePressEvent(QMouseEvent*) override;
+    void mouseMoveEvent(QMouseEvent*) override;
+    void wheelEvent(QWheelEvent*) override;
 
 protected slots:
-	void onTimeout();
+    void onTimeout();
 
 private:
-	void initMaterial();
-	void compileShaderProgram(QOpenGLShaderProgram&, const QString&, const QString&);
-	void loadLight();
-	void loadCube();
-	void loadSphere();
-	void drawLight();
-	void drawCube();
-	void drawSphere();
-	void zoomIn(int);
+    void initMaterial();
+    void compileShaderProgram(QOpenGLShaderProgram&, const QString&, const QString&);
+    void loadLight();
+    void loadCube();
+    void loadSphere();
+    void drawLight();
+    void drawCube();
+    void drawSphere();
+    void zoomIn(int);
 
 private:
-	float zoom{ 30.0f };
-	float fps{ FPS };
-	int mouse_x{ 0 }, mouse_y{ 0 };
+    float zoom{ 30.0f };
+    float fps{ FPS };
+    int mouse_x{ 0 }, mouse_y{ 0 };
 
-	Camera camera;
-	Light light;
-	QMatrix4x4 projection;
-	System system;
-	QTimer* timer;
+    Camera camera;
+    Light light;
+    QMatrix4x4 projection;
+    System system;
+    QTimer* timer;
 
 private:
-	QOpenGLShaderProgram sphereShaderProgram, cubeShaderProgram, lightShaderProgram;
-	GLuint sphereVAO{ 0 }, cubeVAO{ 0 }, lightVAO{ 0 };
-	QVector<Material> materials;
+    QOpenGLShaderProgram sphereShaderProgram, cubeShaderProgram, lightShaderProgram;
+    GLuint sphereVAO{ 0 }, cubeVAO{ 0 }, lightVAO{ 0 };
+    QVector<Material> materials;
 };

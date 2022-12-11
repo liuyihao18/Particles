@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 constexpr float PI = 3.14159265358979323846f;
 constexpr float E = 2.71828182845904523536f;

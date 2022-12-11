@@ -1,4 +1,4 @@
-﻿/*
+/*
  * reference: CUDA samples (particles)
  */
 

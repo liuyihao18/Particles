@@ -1,4 +1,4 @@
-﻿#include "opengl_widget.h"
+#include "opengl_widget.h"
 #include "gui_handler.h"
 #include "utils.h"
 

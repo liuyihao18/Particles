@@ -1,4 +1,4 @@
-﻿#include "cube.h"
+#include "cube.h"
 
 Cube *Cube::container = nullptr;
 
@@ -55,7 +55,8 @@ void Cube::GetVertices(QVector<float> &cubeVertices)
         0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
         0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
         -0.5f, 0.5f, 0.5f, 0.0f, 1.0f, 0.0f,
-        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f};
+        -0.5f, 0.5f, -0.5f, 0.0f, 1.0f, 0.0f
+    };
     cubeVertices.clear();
     cubeVertices.append(vertices);
 }

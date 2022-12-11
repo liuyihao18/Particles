@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 #include "constant.h"
 
 constexpr float FPS = 60.0f;
@@ -15,9 +15,9 @@ constexpr float FRICTION = 0.05f; // 摩擦
 
 // 弹性
 constexpr float ELASTICITY[PROTO_NUM][PROTO_NUM] = {
-	0.9f, 0.9f, 0.7f, 0.8f, 0.6f,
-	0.9f, 0.9f, 0.7f, 0.8f, 0.5f,
-	0.7f, 0.7f, 0.4f, 0.5f, 0.8f,
-	0.8f, 0.8f, 0.5f, 0.6f, 0.9f,
-	0.5f, 0.9f, 0.6f, 0.7f, 0.8f
+    0.9f, 0.9f, 0.7f, 0.8f, 0.6f,
+    0.9f, 0.9f, 0.7f, 0.8f, 0.5f,
+    0.7f, 0.7f, 0.4f, 0.5f, 0.8f,
+    0.8f, 0.8f, 0.5f, 0.6f, 0.9f,
+    0.5f, 0.9f, 0.6f, 0.7f, 0.8f
 };
