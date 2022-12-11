@@ -1,16 +1,16 @@
-#include "camera.h"
+﻿#include "camera.h"
 
 Camera::Camera()
 	: eye(0, 0, 1), up(0, 1, 0), center(0, 0, 0), disR(3.0)
 {
 }
 
-Camera::Camera(const QVector3D& eye, const QVector3D& up, const QVector3D& lookat)
+Camera::Camera(const QVector3D &eye, const QVector3D &up, const QVector3D &lookat)
 	: Camera(eye, up, lookat, 3.0)
 {
 }
 
-Camera::Camera(const QVector3D& eye, const QVector3D& up, const QVector3D& lookat, float disR)
+Camera::Camera(const QVector3D &eye, const QVector3D &up, const QVector3D &lookat, float disR)
 	: eye(eye), up(up.normalized()), center(lookat), disR(disR)
 {
 }
