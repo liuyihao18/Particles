@@ -15,7 +15,7 @@ Qt VS Tools
 依赖库：
 
 ```
-QT6.4.2
+QT 6.4.2
 CUDA Toolkit 11.8
 ```
 
