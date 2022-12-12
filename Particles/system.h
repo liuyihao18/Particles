@@ -21,11 +21,14 @@ public:
         float size
     );
 
+    // 重新开始
+    void restart();
+
     // 返回粒子的位置
     float *getPos();
 
     // 更新粒子的位置
-    void update(float deltaT);
+    void updateParticles(float deltaT);
 
     // 返回粒子的种类
     uint *getType();

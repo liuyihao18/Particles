@@ -102,20 +102,28 @@ extern "C"
         getLastCudaError("findCellStartD execution failed.");
     }
 
-    void collide(float *pos, float *vel, float *accel, uint *type,
+    // 计算粒子碰撞产生的加速度
+    void collide(float *accel, float *pos, float *vel, uint *type,
                  uint *gridParticleIndex,
                  uint *cellStart, uint *cellEnd,
-                 uint numParticles,
-                 float deltaT)
+                 uint numParticles)
     {
         uint numThreads, numBlocks;
         computeGridSize(numParticles, 256, numBlocks, numThreads);
 
-        // 计算碰撞产生的加速度
         collideD<<<numBlocks, numThreads>>>((float3 *)accel, (float3 *)pos, (float3 *)vel, type, gridParticleIndex, cellStart, cellEnd, numParticles);
         getLastCudaError("collideD execution failed.");
+    }
 
-        // 更新粒子的位置
+    // 更新粒子的位置
+    void update(float *pos, float *vel, float *accel, uint *type,
+                uint *gridParticleIndex,
+                uint numParticles,
+                float deltaT)
+    {
+        uint numThreads, numBlocks;
+        computeGridSize(numParticles, 256, numBlocks, numThreads);
+
         updateD<<<numBlocks, numThreads>>>((float3 *)pos, (float3 *)vel, (float3 *)accel, type, gridParticleIndex, numParticles, deltaT);
         getLastCudaError("updateD execution failed.");
     }

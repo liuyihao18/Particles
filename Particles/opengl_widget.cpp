@@ -7,6 +7,8 @@
 #include <QTime>
 #include <QInputDialog>
 
+#include <iostream>
+
 OpenGLWidget::OpenGLWidget(QWidget *parent)
     : QOpenGLWidget(parent), timer(new QTimer(this))
 {
@@ -16,6 +18,8 @@ OpenGLWidget::OpenGLWidget(QWidget *parent)
     if (!ok) {
         exit(0);
     }
+    std::cout << "* Particle number: " << numParticles << std::endl;
+    this->numParticles = numParticles;
     system.init(
         numParticles,
         make_float3(Cube::GetContainer()->position), 
@@ -77,7 +81,7 @@ void OpenGLWidget::paintGL()
 
 void OpenGLWidget::keyPressEvent(QKeyEvent *e)
 {
-    // 键盘：控制移动、缩放等
+    // 键盘：控制移动、缩放、重启等
     switch (e->key())
     {
     case Qt::Key_A:
@@ -104,6 +108,8 @@ void OpenGLWidget::keyPressEvent(QKeyEvent *e)
     case Qt::Key_X:
         zoomIn(-2);
         break;
+    case Qt::Key_R:
+        system.restart();
         break;
     }
 
@@ -167,7 +173,7 @@ void OpenGLWidget::onTimeout()
     static int cnt = 0;
     static int sum = 0;
     QTime start = QTime::currentTime();
-    system.update(1 / fps);
+    system.updateParticles(1 / fps);
     update();
     QTime end = QTime::currentTime();
     sum += start.msecsTo(end);
@@ -180,7 +186,7 @@ void OpenGLWidget::onTimeout()
 // 初始化材质
 void OpenGLWidget::initMaterial()
 {
-    for (int i = 0; i < PARTICLE_NUM; i++)
+    for (int i = 0; i < numParticles; i++)
     {
         materials.push_back(Material::random());
     }
@@ -359,7 +365,7 @@ void OpenGLWidget::drawSphere()
 
         float *pos = system.getPos();
         uint *type = system.getType();
-        for (int i = 0; i < PARTICLE_NUM; i++)
+        for (int i = 0; i < numParticles; i++)
         {
             QVector3D position(pos[3 * i], pos[3 * i + 1], pos[3 * i + 2]);
             // Material

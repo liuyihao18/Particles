@@ -21,6 +21,16 @@ void System::init(uint numParticles, float3 origin, float size)
     initialize(numParticles, origin, size);
 }
 
+// 重新开始
+void System::restart()
+{
+    initParticles();
+    initializeArray(dAccel, numParticles * sizeof(float) * 3);
+    copyArrayToDevice(dPos, hPos, 0, numParticles * sizeof(float) * 3);
+    copyArrayToDevice(dVel, hVel, 0, numParticles * sizeof(float) * 3);
+    copyArrayToDevice(dType, hType, 0, numParticles * sizeof(uint));
+}
+
 // 返回粒子的位置
 float *System::getPos()
 {
@@ -29,7 +39,7 @@ float *System::getPos()
 }
 
 // 更新粒子的位置
-void System::update(float deltaT)
+void System::updateParticles(float deltaT)
 {
     // 1. 计算粒子哈希
     calcHash(dGridParticleHash, dGridParticleIndex, dPos, numParticles);
@@ -38,7 +48,9 @@ void System::update(float deltaT)
     // 3. 哈希反向索引
     findCellStart(dCellStart, dCellEnd, dGridParticleHash, numParticles, numCells);
     // 4. 计算碰撞
-    collide(dPos, dVel, dAccel, dType, dGridParticleIndex, dCellStart, dCellEnd, numParticles, deltaT);
+    collide(dAccel, dPos, dVel, dType, dGridParticleIndex, dCellStart, dCellEnd, numParticles);
+    // 5. 更新位置
+    update(dPos, dVel, dAccel, dType, dGridParticleIndex, numParticles, deltaT);
 }
 
 // 返回粒子的种类

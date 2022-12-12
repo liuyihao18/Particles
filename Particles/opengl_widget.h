@@ -72,5 +72,6 @@ private:
 private:
     QOpenGLShaderProgram sphereShaderProgram, cubeShaderProgram, lightShaderProgram;
     GLuint sphereVAO{0}, cubeVAO{0}, lightVAO{0};
-    QVector<Material> materials;
+    uint numParticles;           // 粒子数量
+    QVector<Material> materials; // 材质
 };

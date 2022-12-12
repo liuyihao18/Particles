@@ -24,9 +24,10 @@ extern "C"
     void sortParticles(uint *dGridParticleHash, uint *dGridParticleIndex, uint numParticles);
     void findCellStart(uint *cellStart, uint *cellEnd, uint *gridParticleHash, uint numParticles, uint numCells);
 
-    void collide(float *pos, float *vel, float *accel, uint *type,
+    void collide(float *accel, float *pos, float *vel, uint *type,
                  uint *gridParticleIndex,
                  uint *cellStart, uint *cellEnd,
-                 uint numParticles,
-                 float deltaT);
+                 uint numParticles);
+    void update(float *pos, float *vel, float *accel, uint *type,
+                uint *gridParticleIndex, uint numParticles, float deltaT);
 }
