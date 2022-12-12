@@ -177,10 +177,12 @@ void OpenGLWidget::onTimeout()
     system.updateParticles(1 / fps);
     update();
     QTime end = QTime::currentTime();
-    sum += start.msecsTo(end);
     cnt++;
+    sum += start.msecsTo(end);
     if (cnt == 10) {
         emit renderTimeChange(sum / cnt);
+        cnt = 0;
+        sum = 0;
     }
 }
 

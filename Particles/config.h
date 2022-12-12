@@ -7,7 +7,7 @@ constexpr float FPS = 60.0f;
 constexpr int PARTICLE_NUM = 5 * 5 * 5;
 
 // 容器大小
-constexpr float CUBE_SIZE = 1.0f;
+constexpr float CUBE_SIZE = 2.0f;
 
 /* 物理量配置 */
 constexpr float DECAY = 0.9999f;  // 衰减
