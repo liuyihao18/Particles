@@ -15,7 +15,7 @@ Widget::Widget(QWidget *parent)
     connect(handler, SIGNAL(warnMsg(QString)), this, SLOT(onWarnMsgReceived(QString)));
     connect(handler, SIGNAL(errMsg(QString)), this, SLOT(onErrMsgReceived(QString)));
     // 连接信号
-    connect(ui->openGLWidget, SIGNAL(renderTimeChange(int)), this, SLOT(onRenderTimeChanged(int)));
+    connect(ui->openGLWidget, SIGNAL(fpsChange(int)), this, SLOT(onFpsChanged(int)));
     connect(ui->openGLWidget, SIGNAL(cameraChange(QVector3D, QVector3D)), this, SLOT(onCameraChanged(QVector3D, QVector3D)));
 }
 
@@ -40,9 +40,9 @@ void Widget::onErrMsgReceived(QString errMsg)
     exit(1);
 }
 
-void Widget::onRenderTimeChanged(int renderTime)
+void Widget::onFpsChanged(int renderTime)
 {
-    ui->renderTimeLabel->setText(tr("render: ") + QString::number(renderTime) + tr("ms"));
+    ui->renderTimeLabel->setText(tr("fps: ") + QString::number(renderTime));
 }
 
 void Widget::onCameraChanged(QVector3D eye, QVector3D center)

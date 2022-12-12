@@ -1,13 +1,14 @@
 #pragma once
 #include "constant.h"
 
-constexpr float FPS = 60.0f;
-
 // 粒子的数目
 constexpr int PARTICLE_NUM = 5 * 5 * 5;
 
 // 容器大小
 constexpr float CUBE_SIZE = 2.0f;
+
+// 时间戳比率
+constexpr float TIMESTAMP_RATIO_FPS = 2.5;
 
 /* 物理量配置 */
 constexpr float DECAY = 0.9999f;  // 衰减

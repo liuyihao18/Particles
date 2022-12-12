@@ -61,7 +61,7 @@ void OpenGLWidget::initializeGL()
     initMaterial();
 
     /* Refresh */
-    timer->start(1 / fps);
+    timer->start(1);
 }
 
 void OpenGLWidget::resizeGL(int w, int h)
@@ -71,13 +71,31 @@ void OpenGLWidget::resizeGL(int w, int h)
 
 void OpenGLWidget::paintGL()
 {
+    static int cnt = 0;
+    static int sum = 0;
+    static QTime lastTime;
+    // 清除屏幕
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    // 绘制灯
     drawLight();
+    // 用线框模式绘制容器
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     drawCube();
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    // 绘制粒子
     drawSphere();
+    // 计算帧率
+    QTime time = QTime::currentTime();
+    cnt++;
+    sum += lastTime.msecsTo(time);
+    if (cnt == 10) {
+        fps = 1000.0 * cnt / sum;
+        emit fpsChange(static_cast<int>(fps));
+        cnt = 0;
+        sum = 0;
+    }
+    lastTime = time;
 }
 
 void OpenGLWidget::keyPressEvent(QKeyEvent *e)
@@ -171,19 +189,8 @@ void OpenGLWidget::wheelEvent(QWheelEvent *e)
 // 更新
 void OpenGLWidget::onTimeout()
 {
-    static int cnt = 0;
-    static int sum = 0;
-    QTime start = QTime::currentTime();
-    system.updateParticles(1 / fps);
+    system.updateParticles(TIMESTAMP_RATIO_FPS / fps);
     update();
-    QTime end = QTime::currentTime();
-    cnt++;
-    sum += start.msecsTo(end);
-    if (cnt == 10) {
-        emit renderTimeChange(sum / cnt);
-        cnt = 0;
-        sum = 0;
-    }
 }
 
 // 初始化材质
@@ -371,6 +378,7 @@ void OpenGLWidget::drawSphere()
         for (int i = 0; i < numParticles; i++)
         {
             QVector3D position(pos[3 * i], pos[3 * i + 1], pos[3 * i + 2]);
+            
             // Material
             sphereShaderProgram.setUniformValue("material.ambient", materials[i].ambient);
             sphereShaderProgram.setUniformValue("material.diffuse", materials[i].diffuse);

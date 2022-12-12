@@ -21,7 +21,7 @@ struct SimParams
     float3 minCorner; // 正方体的最小点
     float3 maxCorner; // 正方体的最大点
 
-    /* Phisical */
+    /* Physical */
     float3 gravity; // 重力
     float spring;   // 弹力
     float damping;  // 阻尼

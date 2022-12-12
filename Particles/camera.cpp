@@ -5,13 +5,13 @@ Camera::Camera()
 {
 }
 
-Camera::Camera(const QVector3D &eye, const QVector3D &up, const QVector3D &lookat)
-    : Camera(eye, up, lookat, 3.0)
+Camera::Camera(const QVector3D &eye, const QVector3D &up, const QVector3D &center)
+    : Camera(eye, up, center, 3.0)
 {
 }
 
-Camera::Camera(const QVector3D &eye, const QVector3D &up, const QVector3D &lookat, float disR)
-    : eye(eye), up(up.normalized()), center(lookat), disR(disR)
+Camera::Camera(const QVector3D &eye, const QVector3D &up, const QVector3D &center, float disR)
+    : eye(eye), up(up.normalized()), center(center), disR(disR)
 {
 }
 

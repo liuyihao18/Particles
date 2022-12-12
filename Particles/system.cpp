@@ -152,9 +152,9 @@ void System::initialize(uint numParticles, float3 origin, float size)
     this->numCells = GRID_SIZE * GRID_SIZE * GRID_SIZE;
 
     // CPU初始化
-    hPos = new float[numParticles * 3]();
-    hVel = new float[numParticles * 3]();
-    hType = new uint[numParticles]();
+    hPos = new float[(size_t)numParticles * 3]();
+    hVel = new float[(size_t)numParticles * 3]();
+    hType = new uint[(size_t)numParticles]();
 
     initParams();
     initParticles();

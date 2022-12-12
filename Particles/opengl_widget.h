@@ -32,7 +32,7 @@ protected:
     void wheelEvent(QWheelEvent *) override;
 
 signals:
-    void renderTimeChange(int);
+    void fpsChange(int);
     void cameraChange(QVector3D, QVector3D);
 
 protected slots:
@@ -57,7 +57,7 @@ private:
 private:
     /* 显示 */
     float zoom{30.0f};          // 缩放
-    float fps{FPS};             // 帧率
+    float fps{1e9};             // 帧率
     int mouse_x{0}, mouse_y{0}; // 鼠标位置
 
     /* 场景 */
