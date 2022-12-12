@@ -29,7 +29,8 @@ QMatrix4x4 Camera::getViewMatrix() const
 
 QVector3D Camera::getEye() const
 {
-    return eye;
+    QVector3D real_eye = (eye - center).normalized() * disR + center;
+    return real_eye;
 }
 
 QVector3D Camera::getUp() const

@@ -18,6 +18,7 @@ OpenGLWidget::OpenGLWidget(QWidget *parent)
     if (!ok) {
         exit(0);
     }
+    std::cout << "* Cube size: " << Cube::GetContainer()->size << std::endl;
     std::cout << "* Particle number: " << numParticles << std::endl;
     this->numParticles = numParticles;
     system.init(
@@ -44,7 +45,7 @@ void OpenGLWidget::initializeGL()
         QVector3D(-0.25f, 0.28f, 0.33f),
         QVector3D(0, 1, 0),
         QVector3D(0, 0, 0),
-        3.0f
+        3.0f * Cube::GetContainer()->size
     );
     emit cameraChange(camera.getEye(), camera.getCenter());
 

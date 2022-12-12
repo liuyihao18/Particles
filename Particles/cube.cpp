@@ -71,7 +71,7 @@ Cube *Cube::GetContainer()
 {
     if (!container)
     {
-        container = new Cube(QVector3D(0, 0, 0), 1.0f);
+        container = new Cube(QVector3D(0, 0, 0), CUBE_SIZE);
     }
     return container;
 }

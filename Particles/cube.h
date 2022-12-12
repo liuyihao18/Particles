@@ -1,5 +1,7 @@
 #pragma once
 
+#include "config.h"
+
 #include <QVector3D>
 #include <QVector>
 
